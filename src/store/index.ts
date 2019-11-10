@@ -33,8 +33,8 @@ const rootReducer = combineReducers<{
 });
 
 const rrfConfig = {
-  userProfile: "users",
-  useFirestoreForProfile: true
+  //userProfile: "users",
+  //useFirestoreForProfile: true
 };
 
 const initialState = {};

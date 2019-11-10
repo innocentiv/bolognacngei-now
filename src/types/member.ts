@@ -36,8 +36,8 @@ export enum Enum_Member_Role {
 }
 
 export type Member = {
-  name?: Maybe<string>;
-  user?: Maybe<Reference>;
+  name?: string;
+  user?: string;
   renewalDate?: Maybe<DateTime>;
   group?: Maybe<Enum_Member_Group>;
   role?: Maybe<Enum_Member_Role>;

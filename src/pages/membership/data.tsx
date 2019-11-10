@@ -7,6 +7,7 @@ interface IMembershipDataProps extends RouteComponentProps<{ id: string }> {}
 
 const MembershipData: React.FC<IMembershipDataProps> = ({ match }) => {
   const { id } = match.params;
+
   return (
     <>
       <h3>Membership Data</h3>

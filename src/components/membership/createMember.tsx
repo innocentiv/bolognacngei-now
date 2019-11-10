@@ -1,44 +1,85 @@
 import * as React from "react";
-import { useCallback, useEffect } from "react";
 import { useCreateMember } from "../../hooks/membership";
-import { useLocation } from "../../hooks/router";
+import { Formik, Form, Field } from "formik";
 import { membershipData } from "../../services/routes";
-import { useUser } from "../../hooks/auth";
-import { Member } from "../../types/member";
+import {
+  Button,
+  CircularProgress,
+  makeStyles,
+  Theme,
+  createStyles
+} from "@material-ui/core";
+import { TextField } from "formik-material-ui";
+import { useLocation } from "../../hooks/router";
 
 interface ICreateMemberProps {}
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    createMemberForm: {
+      display: "flex",
+      flexDirection: "column",
+      "& > *": {
+        marginTop: theme.spacing(2)
+      }
+    },
+    loading: {
+      marginLeft: theme.spacing(1)
+    }
+  })
+);
+
 const CreateMember: React.FC<ICreateMemberProps> = () => {
   const createMember = useCreateMember();
+  const classes = useStyles();
+  const { navigate } = useLocation();
 
-  //const { navigate } = useLocation();
-  // const handleButtonClick = useCallback(() => {
-  //   const newMember: Member = {
-  //     name: "test Relation",
-  //     user:
-  //   };
+  interface Values {
+    name: string;
+  }
 
-  //   createMember({
-  //     variables: {
-  //       member: newMember
-  //     }
-  //   });
-  // }, [createMember, user]);
-
-  // useEffect(() => {
-  //   if (
-  //     data &&
-  //     data.createMember &&
-  //     data.createMember.member &&
-  //     data.createMember.member.id
-  //   ) {
-  //     navigate(membershipData(data.createMember.member.id));
-  //   }
-  // }, [navigate, data]);
-
-  // if (error) return <span>{error}</span>;
-  // if (loading) return <span>Loading List</span>;
-  return <button>Create User</button>;
+  return (
+    <Formik
+      initialValues={{
+        name: ""
+      }}
+      validate={values => {
+        const errors: Partial<Values> = {};
+        if (!values.name) {
+          errors.name = "Devi inserire un nome utente";
+        }
+        return errors;
+      }}
+      onSubmit={async ({ name }, { setSubmitting }) => {
+        debugger;
+        const member = await createMember(name);
+        setSubmitting(false);
+        navigate(membershipData(member.id));
+      }}
+    >
+      {({ isSubmitting }) => (
+        <Form className={classes.createMemberForm}>
+          <Field
+            name="name"
+            type="text"
+            label="Inserisci il nome dello scout"
+            component={TextField}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            disabled={isSubmitting}
+            type="submit"
+          >
+            Iscrivi un nuovo scout
+            {isSubmitting && (
+              <CircularProgress size="1em" className={classes.loading} />
+            )}
+          </Button>
+        </Form>
+      )}
+    </Formik>
+  );
 };
 
 export default CreateMember;
