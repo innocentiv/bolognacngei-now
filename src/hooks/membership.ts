@@ -1,29 +1,7 @@
-import { UseQueryOptions } from "graphql-hooks";
-import { useQueryAuth, useMutationAuth } from "./graphql";
+export const useMemberList = () => {};
 
-const MEMBER_LIST_QUERY = /* GraphQL */ `
-  query MemberList {
-    members {
-      name
-      user {
-        id
-      }
-    }
-  }
-`;
+export const useCreateMember = () => {};
 
-export const useMemberList = (options?: UseQueryOptions<any>) => {
-  return useQueryAuth(MEMBER_LIST_QUERY, options);
-};
+export const useUpdateMember = (memberId: string) => {};
 
-const CREATE_MEMBER_MUTATION = `mutation CreateMember($member: MemberInput!) {
-  createMember(input: {data: $member}) {
-    member {
-      id
-    }
-  }
-}`;
-
-export const useCreateMember = (options?: UseQueryOptions<any>) => {
-  return useMutationAuth(CREATE_MEMBER_MUTATION, options);
-};
+export const useArchiveMember = () => {};

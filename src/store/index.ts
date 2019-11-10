@@ -1,25 +1,54 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
+import { composeWithDevTools } from "redux-devtools-extension";
+import { createFirestoreInstance, firestoreReducer } from "redux-firestore";
+import {
+  ReactReduxFirebaseProviderProps,
+  firebaseReducer,
+  FirebaseReducer
+} from "react-redux-firebase";
 import thunk from "redux-thunk";
-import { authReducer as auth } from "./auth/reducer";
-import { loadState, saveState } from "../services/localStorage";
+import firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/firestore";
 
-const rootReducer = combineReducers({
-  auth
+const config = {
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  databaseURL: process.env.REACT_APP_DATABASE_URL,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID
+} as const;
+
+firebase.initializeApp(config);
+firebase.firestore();
+
+const rootReducer = combineReducers<{
+  firebase: FirebaseReducer.Reducer;
+  firestore: any;
+}>({
+  firebase: firebaseReducer,
+  firestore: firestoreReducer
 });
 
-const persistedState = loadState();
+const rrfConfig = {
+  userProfile: "users",
+  useFirestoreForProfile: true
+};
 
+const initialState = {};
 export const store = createStore(
   rootReducer,
-  persistedState,
-  applyMiddleware(thunk)
+  initialState,
+  composeWithDevTools(applyMiddleware(thunk))
 );
 
-store.subscribe(() => {
-  const state = store.getState();
-  saveState({
-    auth: state.auth
-  });
-});
+export const rrfProps: ReactReduxFirebaseProviderProps = {
+  firebase,
+  config: rrfConfig,
+  dispatch: store.dispatch,
+  createFirestoreInstance
+};
 
 export type StateType = ReturnType<typeof rootReducer>;

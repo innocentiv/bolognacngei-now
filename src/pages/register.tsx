@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useAuthActions, useUser } from "../hooks/auth";
+import { useAuthActions, useAuthError } from "../hooks/auth";
 import { makeStyles } from "@material-ui/styles";
 import {
   Theme,
@@ -49,8 +49,8 @@ interface Values {
 }
 
 const Register: React.FC = () => {
-  const { error } = useUser();
   const { register } = useAuthActions();
+  const error = useAuthError();
   const classes = useStyles();
 
   return (
@@ -63,7 +63,6 @@ const Register: React.FC = () => {
           <Typography component="p">Registra un nuovo utente.</Typography>
           <Formik
             initialValues={{
-              username: "",
               email: "",
               password: "",
               passwordConfirmation: ""
@@ -77,9 +76,6 @@ const Register: React.FC = () => {
               ) {
                 errors.email = "Indirizzo email non valido";
               }
-              if (!values.username) {
-                errors.username = "Devi inserire il nome del tutore";
-              }
               if (!values.password) {
                 errors.password = "Devi scegliere una password";
               } else if (!values.passwordConfirmation) {
@@ -90,21 +86,12 @@ const Register: React.FC = () => {
               }
               return errors;
             }}
-            onSubmit={async (
-              { username, email, password },
-              { setSubmitting }
-            ) => {
-              await register(username, email, password);
+            onSubmit={async ({ email, password }, { setSubmitting }) => {
+              await register(email, password);
               setSubmitting(false);
             }}
             render={({ isSubmitting }) => (
               <Form className={classes.loginForm}>
-                <Field
-                  type="text"
-                  name="username"
-                  label="Inserisci il nome del tutore"
-                  component={TextField}
-                />
                 <Field
                   name="email"
                   type="email"
@@ -135,7 +122,11 @@ const Register: React.FC = () => {
                     <CircularProgress size="1em" className={classes.loading} />
                   )}
                 </Button>
-                {error && <Typography component="p">{error}</Typography>}
+                {error && (
+                  <Typography component="p" color="error">
+                    {error.message}
+                  </Typography>
+                )}
               </Form>
             )}
           />

@@ -7,12 +7,16 @@ export const RedirectUserRoute: React.FC<RouteProps & RedirectProps> = ({
   to,
   ...rest
 }) => {
-  const { user } = useUser();
+  const user = useUser();
   return (
     <Route
       {...rest}
       render={props =>
-        user ? <Redirect to={to} /> : Component && <Component {...props} />
+        user.isEmpty ? (
+          Component && <Component {...props} />
+        ) : (
+          <Redirect to={to} />
+        )
       }
     />
   );

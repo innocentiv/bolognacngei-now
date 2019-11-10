@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useAuthActions, useUser } from "../hooks/auth";
+import { useAuthActions, useAuthError } from "../hooks/auth";
 import {
   Paper,
   Typography,
@@ -49,7 +49,7 @@ interface Values {
 
 const Login: React.FC = () => {
   const { login } = useAuthActions();
-  const { error } = useUser();
+  const error = useAuthError();
   const classes = useStyles();
 
   return (
@@ -107,7 +107,11 @@ const Login: React.FC = () => {
                     <CircularProgress size="1em" className={classes.loading} />
                   )}
                 </Button>
-                {error && <Typography component="p">{error}</Typography>}
+                {error && (
+                  <Typography component="p" color="error">
+                    {error.message}
+                  </Typography>
+                )}
               </Form>
             )}
           />

@@ -7,20 +7,20 @@ export const PrivateRoute: React.FC<RouteProps> = ({
   component: Component,
   ...rest
 }) => {
-  const { user } = useUser();
+  const user = useUser();
   return (
     <Route
       {...rest}
       render={props =>
-        user ? (
-          Component && <Component {...props} />
-        ) : (
+        user.isEmpty ? (
           <Redirect
             to={{
               pathname: login(),
               state: { from: props.location }
             }}
           />
+        ) : (
+          Component && <Component {...props} />
         )
       }
     />
