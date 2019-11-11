@@ -14,7 +14,6 @@ interface IMembersProps extends RouteComponentProps {}
 const Members: React.FC<IMembersProps> = () => {
   return (
     <>
-      <h2>Membership</h2>
       <Route path={membershipData()} component={MembershipData} />
       <Route path={membershipHealth()} component={MembershipHealth} />
       <Route path={membershipPayment()} component={MembershipPayment} />

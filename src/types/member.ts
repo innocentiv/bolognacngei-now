@@ -5,13 +5,12 @@ export type UploadFile = string;
 export type DateTime = any;
 
 export enum Enum_Member_Group {
-  Nogroup = "nogroup",
   Group1 = "group1",
   Group2 = "group2",
   Group3 = "group3",
   Group5 = "group5",
   Clan = "clan",
-  Cos = "cos"
+  Administrator = "administrator"
 }
 
 export enum Enum_Member_Reductionfamilyrelation {
@@ -36,8 +35,9 @@ export enum Enum_Member_Role {
 }
 
 export type Member = {
-  name?: string;
-  user?: string;
+  id?: string;
+  name: string;
+  user: string;
   renewalDate?: Maybe<DateTime>;
   group?: Maybe<Enum_Member_Group>;
   role?: Maybe<Enum_Member_Role>;

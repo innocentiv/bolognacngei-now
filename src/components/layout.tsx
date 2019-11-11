@@ -2,7 +2,6 @@ import { AppBar, Button, Toolbar, Typography } from "@material-ui/core";
 import makeStyles from "@material-ui/styles/makeStyles";
 import * as React from "react";
 import { useAuthActions } from "../hooks/auth";
-import Home from "../pages/home";
 import Login from "../pages/login";
 import Membership from "../pages/membership";
 import Overview from "../pages/overview";
@@ -17,7 +16,7 @@ import {
 import ButtonLink from "./buttonLink";
 import { PrivateRoute } from "./privateRoute";
 import { RedirectUserRoute } from "./redirectUserRoute";
-import { Link } from "react-router-dom";
+import { Link, Redirect, Route } from "react-router-dom";
 
 const useStyles = makeStyles({
   title: {
@@ -54,12 +53,9 @@ const Layout: React.FC<{}> = () => {
         </Toolbar>
       </AppBar>
       <main>
-        <RedirectUserRoute
-          exact
-          path={home()}
-          component={Home}
-          to={overview()}
-        />
+        <Route exact path={home()}>
+          <Redirect to={overview()} />
+        </Route>
         <RedirectUserRoute path={login()} component={Login} to={overview()} />
         <RedirectUserRoute
           path={register()}

@@ -5,18 +5,18 @@ import { useSelector } from "react-redux";
 import { StateType } from "../store";
 import { useUser } from "./auth";
 
-export const useUpdateMember = (
-  memberId: string,
-  memberUpdate: Partial<Member>
-) => {
+export const useUpdateMember = () => {
   const firestore = useFirestore();
 
-  const createMember = useCallback(() => {
-    return firestore
-      .collection("members")
-      .doc(memberId)
-      .set(memberUpdate, { merge: true });
-  }, [firestore, memberId, memberUpdate]);
+  const createMember = useCallback(
+    (memberId: string, memberUpdate: Partial<Member>) => {
+      return firestore
+        .collection("members")
+        .doc(memberId)
+        .set(memberUpdate, { merge: true });
+    },
+    [firestore]
+  );
 
   return createMember;
 };
@@ -27,7 +27,7 @@ export const useCreateMember = () => {
 
   const createMember = useCallback(
     (name: string) => {
-      const baseMember: Member = { name, user: user.uid };
+      const baseMember: Member = { name, user: user.uid, email: user.email };
       return firestore.collection("members").add(baseMember);
     },
     [firestore, user]
@@ -39,7 +39,9 @@ export const useCreateMember = () => {
 export const useGetMember = (memberId: string) => {
   useFirestoreConnect(() => [{ collection: "members", doc: memberId }]);
   const member = useSelector<StateType, Member>(
-    ({ firestore: { ordered } }) => ordered.members && ordered.members[memberId]
+    ({ firestore: { ordered } }) =>
+      ordered.members &&
+      ordered.members.find((member: Member) => member.id === memberId)
   );
   return member;
 };
@@ -56,5 +58,11 @@ export const useGetMemberList = () => {
 };
 
 export const useArchiveMember = (memberId: string) => {
-  useUpdateMember(memberId, { user: "" });
+  const updateMember = useUpdateMember();
+  const archiveMember = useCallback(
+    (memberId: string) => updateMember(memberId, { user: "" }),
+    [updateMember]
+  );
+
+  return archiveMember;
 };

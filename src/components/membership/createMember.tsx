@@ -7,7 +7,8 @@ import {
   CircularProgress,
   makeStyles,
   Theme,
-  createStyles
+  createStyles,
+  Typography
 } from "@material-ui/core";
 import { TextField } from "formik-material-ui";
 import { useLocation } from "../../hooks/router";
@@ -39,46 +40,50 @@ const CreateMember: React.FC<ICreateMemberProps> = () => {
   }
 
   return (
-    <Formik
-      initialValues={{
-        name: ""
-      }}
-      validate={values => {
-        const errors: Partial<Values> = {};
-        if (!values.name) {
-          errors.name = "Devi inserire un nome utente";
-        }
-        return errors;
-      }}
-      onSubmit={async ({ name }, { setSubmitting }) => {
-        debugger;
-        const member = await createMember(name);
-        setSubmitting(false);
-        navigate(membershipData(member.id));
-      }}
-    >
-      {({ isSubmitting }) => (
-        <Form className={classes.createMemberForm}>
-          <Field
-            name="name"
-            type="text"
-            label="Inserisci il nome dello scout"
-            component={TextField}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            disabled={isSubmitting}
-            type="submit"
-          >
-            Iscrivi un nuovo scout
-            {isSubmitting && (
-              <CircularProgress size="1em" className={classes.loading} />
-            )}
-          </Button>
-        </Form>
-      )}
-    </Formik>
+    <>
+      <Typography variant="h4" component="h2">
+        Registra un nuovo socio
+      </Typography>
+      <Formik
+        initialValues={{
+          name: ""
+        }}
+        validate={values => {
+          const errors: Partial<Values> = {};
+          if (!values.name) {
+            errors.name = "Devi inserire il nome dello scout";
+          }
+          return errors;
+        }}
+        onSubmit={async ({ name }, { setSubmitting }) => {
+          const member = await createMember(name);
+          setSubmitting(false);
+          navigate(membershipData(member.id));
+        }}
+      >
+        {({ isSubmitting }) => (
+          <Form className={classes.createMemberForm}>
+            <Field
+              name="name"
+              type="text"
+              label="Inserisci il nome dello scout"
+              component={TextField}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              disabled={isSubmitting}
+              type="submit"
+            >
+              Iscrivi un nuovo scout
+              {isSubmitting && (
+                <CircularProgress size="1em" className={classes.loading} />
+              )}
+            </Button>
+          </Form>
+        )}
+      </Formik>
+    </>
   );
 };
 
