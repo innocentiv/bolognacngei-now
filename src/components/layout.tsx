@@ -1,7 +1,7 @@
 import { AppBar, Button, Toolbar, Typography } from "@material-ui/core";
 import makeStyles from "@material-ui/styles/makeStyles";
 import * as React from "react";
-import { useAuthActions } from "../hooks/auth";
+import { useAuthActions, useUser } from "../hooks/auth";
 import Login from "../pages/login";
 import Membership from "../pages/membership";
 import Overview from "../pages/overview";
@@ -31,6 +31,7 @@ const useStyles = makeStyles({
 const Layout: React.FC<{}> = () => {
   const { logout } = useAuthActions();
   const classes = useStyles();
+  const user = useUser();
   return (
     <>
       <AppBar position="static">
@@ -38,18 +39,20 @@ const Layout: React.FC<{}> = () => {
           <Typography variant="h6" className={classes.title}>
             <Link to={home()}>Bologna CNGEI Iscrizioni</Link>
           </Typography>
-          <ButtonLink color="inherit" to={overview()}>
-            Overview
-          </ButtonLink>
-          <ButtonLink color="inherit" to={register()}>
-            Register
-          </ButtonLink>
-          <ButtonLink color="inherit" to={login()}>
-            Login
-          </ButtonLink>
-          <Button onClick={logout} color="inherit">
-            Logout
-          </Button>
+          {user.isEmpty ? (
+            <>
+              <ButtonLink color="inherit" to={register()}>
+                Register
+              </ButtonLink>
+              <ButtonLink color="inherit" to={login()}>
+                Login
+              </ButtonLink>{" "}
+            </>
+          ) : (
+            <Button onClick={logout} color="inherit">
+              Logout
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
       <main>
