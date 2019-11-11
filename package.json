@@ -10,6 +10,7 @@
     "formik-material-ui": "^1.0.0",
     "graphql-hooks": "^4.0.2",
     "graphql-hooks-memcache": "^1.2.4",
+    "material-ui-dropzone": "^2.4.5",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-redux": "^7.1.3",

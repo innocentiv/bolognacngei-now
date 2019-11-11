@@ -103,10 +103,6 @@ const MembershipData: React.FC<IMembershipDataProps> = ({ match }) => {
             "name",
             "Devi inserire Nome e Cognome del socio"
           );
-          validator.requireField(
-            "name",
-            "Devi inserire Nome e Cognome del socio"
-          );
           validator.requireField("group", "Devi selezionare un gruppo");
           validator.requireField("role", "Devi indicare la fascia d'età");
           validator.requireField(
@@ -158,6 +154,16 @@ const MembershipData: React.FC<IMembershipDataProps> = ({ match }) => {
           validator.requireField(
             "privacyHealth",
             "Devi accettare questo campo per proseguire"
+          );
+          validator.validateRegex(
+            "email",
+            /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+            "L'indirizzo mail non è valido"
+          );
+          validator.validateRegex(
+            "fiscalCode",
+            /^[A-Za-z]{6}[0-9LMNPQRSTUV]{2}[A-Za-z]{1}[0-9LMNPQRSTUV]{2}[A-Za-z]{1}[0-9LMNPQRSTUV]{3}[A-Za-z]{1}$/,
+            "Il codice fiscale non è valido"
           );
           return validator.getErrors();
         }}

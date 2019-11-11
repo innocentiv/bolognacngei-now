@@ -1,7 +1,11 @@
 export type Maybe<T> = T | null;
 
 export type Reference = string;
-export type UploadFile = string;
+export type UploadFile = {
+  url: string;
+  name: string;
+  path: string;
+};
 export type DateTime = any;
 
 export enum Enum_Member_Group {
@@ -78,6 +82,6 @@ export type Member = {
   reductionFamily?: Maybe<boolean>;
   reductionFamilyRelation?: Maybe<Enum_Member_Reductionfamilyrelation>;
   reductionRelativeName?: Maybe<string>;
-  healthMedicalDocuments?: Maybe<Array<Maybe<UploadFile>>>;
-  reductionIseeDocuments?: Maybe<Array<Maybe<UploadFile>>>;
+  healthMedicalDocuments?: Maybe<Array<UploadFile>>;
+  reductionIseeDocuments?: Maybe<Array<UploadFile>>;
 };
