@@ -12,6 +12,8 @@ import {
 } from "@material-ui/core";
 import { Formik, Form, Field } from "formik";
 import { TextField } from "formik-material-ui";
+import ButtonLink from "../components/buttonLink";
+import { login } from "../services/routes";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -37,6 +39,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     loading: {
       marginLeft: theme.spacing(1)
+    },
+    link: {
+      marginTop: theme.spacing(2)
     }
   })
 );
@@ -60,7 +65,7 @@ const Register: React.FC = () => {
           <Typography variant="h4" component="h2">
             Nuova Iscrizione
           </Typography>
-          <Typography component="p">Registra un nuovo utente.</Typography>
+          <Typography component="p">Registra un nuovo socio.</Typography>
           <Formik
             initialValues={{
               email: "",
@@ -87,7 +92,11 @@ const Register: React.FC = () => {
               return errors;
             }}
             onSubmit={async ({ email, password }, { setSubmitting }) => {
-              await register(email, password);
+              try {
+                await register(email, password);
+              } catch (error) {
+                console.error(error);
+              }
               setSubmitting(false);
             }}
             render={({ isSubmitting }) => (
@@ -117,7 +126,7 @@ const Register: React.FC = () => {
                   disabled={isSubmitting}
                   type="submit"
                 >
-                  Entra
+                  Registra un nuovo utente
                   {isSubmitting && (
                     <CircularProgress size="1em" className={classes.loading} />
                   )}
@@ -130,6 +139,15 @@ const Register: React.FC = () => {
               </Form>
             )}
           />
+          <ButtonLink
+            to={login()}
+            component={Button}
+            variant="outlined"
+            color="primary"
+            className={classes.link}
+          >
+            Ti sei già registrato? Clicca per Entrare
+          </ButtonLink>
         </Paper>
       </Grid>
     </Grid>

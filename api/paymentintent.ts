@@ -2,28 +2,31 @@ import { NowRequest, NowResponse } from "@now/node";
 import { Member, Enum_Member_Role } from "../src/types/member";
 import Stripe from "stripe";
 
-const stripe = new Stripe("sk_test_JCOwxWGOEA9tuXi1n0PbDwWV003XJU4TT2");
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
 export default async (req: NowRequest, res: NowResponse) => {
   const member = req.body as Member;
-  let amount = 110.0;
+  let amount = 11000;
   if (member.reductionFamily) {
-    amount -= 15;
+    amount -= 1500;
   }
   if (member.role === Enum_Member_Role.Adult) {
-    amount -= 15;
+    amount -= 1500;
   }
   if (
     member.role !== Enum_Member_Role.Adult &&
     member.reductionIsee &&
     member.reductionIseeDocuments
   ) {
-    amount = 75;
+    amount = 7500;
   }
 
   const paymentIntent = await stripe.paymentIntents.create({
     amount,
-    currency: "eur"
+    currency: "eur",
+    receipt_email: member.email || undefined,
+    description: `Iscrizione ${member.name ||
+      "Sconosciuto"} ${member.fiscalCode || ""}`
   });
 
   res.json(paymentIntent);

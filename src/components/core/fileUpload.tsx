@@ -12,7 +12,9 @@ import {
   IconButton,
   makeStyles,
   Theme,
-  createStyles
+  createStyles,
+  FormControl,
+  FormHelperText
 } from "@material-ui/core";
 import FolderIcon from "@material-ui/icons/Folder";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -21,6 +23,9 @@ import { Member, UploadFile } from "../../types/member";
 interface FileUploadProps {
   memberId: string;
   memberProperty: keyof Member;
+  errors?: {
+    [k: string]: string | undefined;
+  };
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -36,13 +41,17 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "block",
       textDecoration: "none",
       color: "inherit"
+    },
+    error: {
+      color: theme.palette.error.main
     }
   })
 );
 
 const FileUpload: React.FC<FileUploadProps> = ({
   memberId,
-  memberProperty
+  memberProperty,
+  errors
 }) => {
   const member = useGetMember(memberId);
   const updateMember = useUpdateMember();
@@ -77,6 +86,8 @@ const FileUpload: React.FC<FileUploadProps> = ({
     [deleteFile, member, memberId, memberProperty, updateMember]
   );
 
+  const hasError = errors && !!errors[memberProperty];
+
   return (
     <>
       <DropzoneArea
@@ -86,9 +97,9 @@ const FileUpload: React.FC<FileUploadProps> = ({
         dropzoneText="Trascina i documenti o clicca"
         showPreviewsInDropzone={false}
       />
-      {member && member.healthMedicalDocuments && (
+      {member && member[memberProperty] && (
         <List className={classes.list}>
-          {member.healthMedicalDocuments.map((file, index) => (
+          {member[memberProperty].map((file: UploadFile, index: number) => (
             <ListItem className={classes.item} key={index}>
               <ListItemAvatar>
                 <Avatar>
@@ -116,6 +127,13 @@ const FileUpload: React.FC<FileUploadProps> = ({
           ))}
         </List>
       )}
+      <FormControl>
+        {hasError && (
+          <FormHelperText className={classes.error}>
+            {errors && errors[memberProperty]}
+          </FormHelperText>
+        )}
+      </FormControl>
     </>
   );
 };

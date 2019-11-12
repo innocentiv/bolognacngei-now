@@ -16,7 +16,7 @@ import PageWrapper from "../../components/pageWrapper";
 import FileUpload from "../../components/core/fileUpload";
 
 import { useGetMember, useUpdateMember } from "../../hooks/membership";
-import { membershipPayment } from "../../services/routes";
+import { membershipReduction } from "../../services/routes";
 import { useLocation } from "../../hooks/router";
 import { ValidatorHelper } from "../../utils/validatorHelper";
 import { CheckBoxField } from "../../components/core/checkBoxField";
@@ -112,7 +112,7 @@ const MembershipHealth: React.FC<IMembershipHealthProps> = ({ match }) => {
         onSubmit={async (values, { setSubmitting }) => {
           await updateMember(id, values as any);
           setSubmitting(false);
-          navigate(membershipPayment(id));
+          navigate(membershipReduction(id));
         }}
       >
         {({ isSubmitting, errors }: FormikProps<Values>) => {
@@ -258,7 +258,7 @@ const MembershipHealth: React.FC<IMembershipHealthProps> = ({ match }) => {
                 disabled={isSubmitting}
                 type="submit"
               >
-                Vai al pagamento della quota
+                Verifica le riduzioni alla quota
                 {isSubmitting && (
                   <CircularProgress size="1em" className={classes.loading} />
                 )}

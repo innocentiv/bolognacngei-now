@@ -27,5 +27,13 @@ export const useAuthActions = () => {
     [firebase]
   );
 
-  return { login, logout, register };
+  const forgot = useCallback(
+    (email: string) =>
+      ((firebase.resetPassword as unknown) as ((
+        email: string
+      ) => Promise<any>))(email),
+    [firebase]
+  );
+
+  return { login, logout, register, forgot };
 };

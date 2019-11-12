@@ -9,19 +9,24 @@ import { ThemeProvider } from "@material-ui/styles";
 import { theme } from "./theme";
 import { CssBaseline } from "@material-ui/core";
 import { ReactReduxFirebaseProvider } from "react-redux-firebase";
+import { StripeProvider } from "react-stripe-elements";
 
 const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <BrowserRouter>
-        <Provider store={store}>
-          <ReactReduxFirebaseProvider {...rrfProps}>
-            <ClientContext.Provider value={client}>
-              <Layout />
-            </ClientContext.Provider>
-          </ReactReduxFirebaseProvider>
-        </Provider>
+        <StripeProvider
+          apiKey={process.env.REACT_APP_STRIPE_PUBLIC_KEY as string}
+        >
+          <Provider store={store}>
+            <ReactReduxFirebaseProvider {...rrfProps}>
+              <ClientContext.Provider value={client}>
+                <Layout />
+              </ClientContext.Provider>
+            </ReactReduxFirebaseProvider>
+          </Provider>
+        </StripeProvider>
       </BrowserRouter>
     </ThemeProvider>
   );

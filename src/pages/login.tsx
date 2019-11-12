@@ -11,8 +11,10 @@ import {
 } from "@material-ui/core";
 import { Formik, Field, Form } from "formik";
 import { TextField } from "formik-material-ui";
+import ButtonLink from "../components/buttonLink";
 
 import Grid from "@material-ui/core/Grid";
+import { register } from "../services/routes";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -38,6 +40,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     loading: {
       marginLeft: theme.spacing(1)
+    },
+    link: {
+      marginTop: theme.spacing(2)
     }
   })
 );
@@ -57,7 +62,7 @@ const Login: React.FC = () => {
       <Grid item className={classes.item}>
         <Paper className={classes.loginWrapper}>
           <Typography variant="h4" component="h2">
-            Entra
+            Modifica un iscrizione
           </Typography>
           <Typography component="p">
             Inserisci utente e password per gestire le iscrizioni
@@ -79,7 +84,11 @@ const Login: React.FC = () => {
               return errors;
             }}
             onSubmit={async ({ email, password }, { setSubmitting }) => {
-              await login(email, password);
+              try {
+                await login(email, password);
+              } catch (error) {
+                console.error(error);
+              }
               setSubmitting(false);
             }}
             render={({ isSubmitting }) => (
@@ -112,6 +121,15 @@ const Login: React.FC = () => {
                     {error.message}
                   </Typography>
                 )}
+                <ButtonLink
+                  to={register()}
+                  component={Button}
+                  variant="outlined"
+                  color="primary"
+                  className={classes.link}
+                >
+                  Mai entrato prima? Registrati
+                </ButtonLink>
               </Form>
             )}
           />

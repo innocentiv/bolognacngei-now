@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Redirect, Route, RouteProps } from "react-router";
 import { useUser } from "../hooks/auth";
-import { login } from "../services/routes";
+import { register } from "../services/routes";
 
 export const PrivateRoute: React.FC<RouteProps> = ({
   component: Component,
@@ -15,7 +15,7 @@ export const PrivateRoute: React.FC<RouteProps> = ({
         user.isEmpty ? (
           <Redirect
             to={{
-              pathname: login(),
+              pathname: register(),
               state: { from: props.location }
             }}
           />

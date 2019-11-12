@@ -14,6 +14,7 @@ import {
   createStyles
 } from "@material-ui/core";
 import PersonIcon from "@material-ui/icons/Person";
+import { Enum_Member_Payment_Status } from "../../types/member";
 
 interface IMemberListProps {}
 
@@ -28,6 +29,9 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(2),
       backgroundColor: theme.palette.grey[100],
       display: "block"
+    },
+    complete: {
+      backgroundColor: "rgb(181, 220, 167)"
     }
   })
 );
@@ -48,7 +52,12 @@ const MemberList: React.FC<IMemberListProps> = props => {
           <Link
             key={index}
             to={membershipData(member.id)}
-            className={classes.item}
+            className={`${classes.item} ${
+              member.paymentStatus ===
+              Enum_Member_Payment_Status.PaymentComplete
+                ? classes.complete
+                : ""
+            }`}
           >
             <ListItem>
               <ListItemAvatar>
@@ -58,7 +67,15 @@ const MemberList: React.FC<IMemberListProps> = props => {
               </ListItemAvatar>
               <ListItemText
                 primary={member.name}
-                secondary={member.fiscalCode}
+                secondary={
+                  member.paymentStatus ===
+                  Enum_Member_Payment_Status.PaymentComplete
+                    ? "Iscrizioni e pagamento completati"
+                    : member.paymentStatus ===
+                      Enum_Member_Payment_Status.Tobeverified
+                    ? "Bonifico caricato in attesa di verifica"
+                    : "Iscrizioni da completare"
+                }
               />
             </ListItem>
           </Link>

@@ -42,15 +42,15 @@ const Layout: React.FC<{}> = () => {
           {user.isEmpty ? (
             <>
               <ButtonLink color="inherit" to={register()}>
-                Register
+                Registrati
               </ButtonLink>
               <ButtonLink color="inherit" to={login()}>
-                Login
+                Entra
               </ButtonLink>{" "}
             </>
           ) : (
             <Button onClick={logout} color="inherit">
-              Logout
+              Esci
             </Button>
           )}
         </Toolbar>
