@@ -4,20 +4,22 @@ import {
   Typography,
   makeStyles,
   Theme,
-  createStyles
+  createStyles,
+  FormGroup,
+  Grid
 } from "@material-ui/core";
 import { Field, Form, Formik, FormikProps } from "formik";
 import { TextField } from "formik-material-ui";
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
 import PageWrapper from "../../components/pageWrapper";
+import FileUpload from "../../components/core/fileUpload";
+
 import { useGetMember, useUpdateMember } from "../../hooks/membership";
 import { membershipPayment } from "../../services/routes";
 import { useLocation } from "../../hooks/router";
-import { useStorage } from "../../hooks/storage";
 import { ValidatorHelper } from "../../utils/validatorHelper";
 import { CheckBoxField } from "../../components/core/checkBoxField";
-import { DropzoneArea } from "material-ui-dropzone";
 
 interface IMembershipHealthProps extends RouteComponentProps<{ id: string }> {}
 
@@ -62,7 +64,6 @@ const MembershipHealth: React.FC<IMembershipHealthProps> = ({ match }) => {
   const { navigate } = useLocation();
   const member = useGetMember(id);
   const updateMember = useUpdateMember();
-  const [uploadFiles, deleteFile] = useStorage();
 
   return member ? (
     <PageWrapper>
@@ -120,57 +121,67 @@ const MembershipHealth: React.FC<IMembershipHealthProps> = ({ match }) => {
               <Typography variant="h5" component="h3">
                 Vaccinazioni o Malattie soggette ad immunizzazione
               </Typography>
+              <Grid container>
+                <Grid item xs={6}>
+                  <FormGroup>
+                    <CheckBoxField<Values>
+                      name="healthMeasles"
+                      label="Morbillo"
+                      errors={errors}
+                    />
+                    <CheckBoxField<Values>
+                      name="healthMumps"
+                      label="Parotite"
+                      errors={errors}
+                    />
+                    <CheckBoxField<Values>
+                      name="healthRubella"
+                      label="Rosolia"
+                      errors={errors}
+                    />
+                    <CheckBoxField<Values>
+                      name="healthChickenpox"
+                      label="Varicella"
+                      errors={errors}
+                    />
+                    <CheckBoxField<Values>
+                      name="healthPertussis"
+                      label="Pertosse"
+                      errors={errors}
+                    />
+                  </FormGroup>
+                </Grid>
+                <Grid item xs={6}>
+                  <FormGroup>
+                    <CheckBoxField<Values>
+                      name="healthPolio"
+                      label="Polio"
+                      errors={errors}
+                    />
+                    <CheckBoxField<Values>
+                      name="healthDiphtheria"
+                      label="Difterite"
+                      errors={errors}
+                    />
+                    <CheckBoxField<Values>
+                      name="healthHepatitisB"
+                      label="Epatite B"
+                      errors={errors}
+                    />
+                    <CheckBoxField<Values>
+                      name="healthHaemophilus"
+                      label="Emofilo B"
+                      errors={errors}
+                    />
+                    <CheckBoxField<Values>
+                      name="healthTetanus"
+                      label="Tetano"
+                      errors={errors}
+                    />
+                  </FormGroup>
+                </Grid>
+              </Grid>
 
-              <CheckBoxField<Values>
-                name="healthMeasles"
-                label="Morbillo"
-                errors={errors}
-              />
-              <CheckBoxField<Values>
-                name="healthMumps"
-                label="Parotite"
-                errors={errors}
-              />
-              <CheckBoxField<Values>
-                name="healthRubella"
-                label="Rosolia"
-                errors={errors}
-              />
-              <CheckBoxField<Values>
-                name="healthChickenpox"
-                label="Varicella"
-                errors={errors}
-              />
-              <CheckBoxField<Values>
-                name="healthPertussis"
-                label="Pertosse"
-                errors={errors}
-              />
-              <CheckBoxField<Values>
-                name="healthPolio"
-                label="Polio"
-                errors={errors}
-              />
-              <CheckBoxField<Values>
-                name="healthDiphtheria"
-                label="Difterite"
-                errors={errors}
-              />
-              <CheckBoxField<Values>
-                name="healthHepatitisB"
-                label="Epatite B"
-                errors={errors}
-              />
-              <CheckBoxField<Values>
-                name="healthHaemophilus"
-                label="Emofilo B"
-                errors={errors}
-              />
-              <CheckBoxField<Values>
-                name="healthTetanus"
-                label="Tetano"
-                errors={errors}
-              />
               <Field
                 name="healthTetanusDate"
                 InputLabelProps={{ shrink: true }}
@@ -237,36 +248,10 @@ const MembershipHealth: React.FC<IMembershipHealthProps> = ({ match }) => {
                 attestino eventuali patologie e trattamenti sopra riportati che
                 ritieni possano essere utili
               </Typography>
-              <DropzoneArea
-                onDrop={async files => {
-                  const urlList = await uploadFiles(files);
-                  await updateMember(id, {
-                    healthMedicalDocuments: [
-                      ...(member.healthMedicalDocuments || []),
-                      ...urlList
-                    ]
-                  });
-                }}
-                onDelete={async file => console.log(await deleteFile(file))}
-                acceptedFiles={[
-                  "image/*",
-                  "application/pdf",
-                  "application/x-pdf"
-                ]}
-                dropzoneText="Trascina i documenti o clicca"
+              <FileUpload
+                memberId={id}
+                memberProperty="healthMedicalDocuments"
               />
-              {member &&
-                member.healthMedicalDocuments &&
-                member.healthMedicalDocuments.map((file, id) => (
-                  <a
-                    key={id}
-                    href={file.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {file.name}
-                  </a>
-                ))}
               <Button
                 variant="contained"
                 color="primary"

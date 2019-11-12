@@ -38,6 +38,12 @@ export enum Enum_Member_Role {
   Waitinglist = "waitinglist"
 }
 
+export enum Enum_Member_Payment_Status {
+  Needpayment = "needpayment",
+  Tobeverified = "tobeverified",
+  PaymentComplete = "paymentcomplete"
+}
+
 export type Member = {
   id?: string;
   name: string;
@@ -82,6 +88,8 @@ export type Member = {
   reductionFamily?: Maybe<boolean>;
   reductionFamilyRelation?: Maybe<Enum_Member_Reductionfamilyrelation>;
   reductionRelativeName?: Maybe<string>;
+  paymentStatus?: Maybe<Enum_Member_Payment_Status>;
   healthMedicalDocuments?: Maybe<Array<UploadFile>>;
   reductionIseeDocuments?: Maybe<Array<UploadFile>>;
+  paymentBankTransfert?: Maybe<Array<UploadFile>>;
 };
