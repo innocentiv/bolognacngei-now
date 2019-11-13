@@ -1,5 +1,9 @@
 import { NowRequest, NowResponse } from "@now/node";
-import { Member, Enum_Member_Role } from "../src/types/member";
+import {
+  Member,
+  Enum_Member_Role,
+  Enum_Member_Group
+} from "../src/types/member";
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
@@ -10,7 +14,10 @@ export default async (req: NowRequest, res: NowResponse) => {
   if (member.reductionFamily) {
     amount -= 1500;
   }
-  if (member.role === Enum_Member_Role.Adult) {
+  if (
+    member.role === Enum_Member_Role.Adult &&
+    member.group !== Enum_Member_Group.Administrator
+  ) {
     amount -= 1500;
   }
   if (
