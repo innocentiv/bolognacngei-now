@@ -6,7 +6,8 @@ import {
   Theme,
   createStyles,
   FormGroup,
-  Grid
+  Grid,
+  IconButton
 } from "@material-ui/core";
 import { Field, Form, Formik, FormikProps } from "formik";
 import { TextField } from "formik-material-ui";
@@ -14,12 +15,18 @@ import * as React from "react";
 import { RouteComponentProps } from "react-router";
 import PageWrapper from "../../components/pageWrapper";
 import FileUpload from "../../components/core/fileUpload";
+import ArrowBackIos from "@material-ui/icons/ArrowBackIos";
 
-import { useGetMember, useUpdateMember } from "../../hooks/membership";
-import { membershipReduction } from "../../services/routes";
+import { useMember, useUpdateMember } from "../../hooks/membership";
+import {
+  membershipReduction,
+  membershipPayment,
+  membershipData
+} from "../../services/routes";
 import { useLocation } from "../../hooks/router";
 import { ValidatorHelper } from "../../utils/validatorHelper";
 import { CheckBoxField } from "../../components/core/checkBoxField";
+import { Enum_Member_Payment_Status } from "../../types/member";
 
 interface IMembershipHealthProps extends RouteComponentProps<{ id: string }> {}
 
@@ -62,11 +69,21 @@ const MembershipHealth: React.FC<IMembershipHealthProps> = ({ match }) => {
   const { id } = match.params;
   const classes = useStyles();
   const { navigate } = useLocation();
-  const member = useGetMember(id);
+  const member = useMember(id);
   const updateMember = useUpdateMember();
 
   return member ? (
     <PageWrapper>
+      <Typography
+        variant="body1"
+        component="span"
+        style={{ margin: "0 auto 1.5rem 0" }}
+      >
+        <IconButton onClick={() => navigate(membershipData(id))} size="small">
+          <ArrowBackIos /> Indietro
+        </IconButton>{" "}
+      </Typography>
+
       <Typography variant="h4" component="h2">
         Dati Sanitari
       </Typography>
@@ -112,7 +129,13 @@ const MembershipHealth: React.FC<IMembershipHealthProps> = ({ match }) => {
         onSubmit={async (values, { setSubmitting }) => {
           await updateMember(id, values as any);
           setSubmitting(false);
-          navigate(membershipReduction(id));
+          if (
+            member.paymentStatus === Enum_Member_Payment_Status.PaymentComplete
+          ) {
+            navigate(membershipPayment(id));
+          } else {
+            navigate(membershipReduction(id));
+          }
         }}
       >
         {({ isSubmitting, errors }: FormikProps<Values>) => {

@@ -5,7 +5,8 @@ import {
   makeStyles,
   Theme,
   createStyles,
-  MenuItem
+  MenuItem,
+  IconButton
 } from "@material-ui/core";
 import { Field, Form, Formik, FormikProps } from "formik";
 import { TextField } from "formik-material-ui";
@@ -13,9 +14,10 @@ import * as React from "react";
 import { RouteComponentProps } from "react-router";
 import PageWrapper from "../../components/pageWrapper";
 import FileUpload from "../../components/core/fileUpload";
+import ArrowBackIos from "@material-ui/icons/ArrowBackIos";
 
-import { useGetMember, useUpdateMember } from "../../hooks/membership";
-import { membershipPayment } from "../../services/routes";
+import { useMember, useUpdateMember } from "../../hooks/membership";
+import { membershipPayment, membershipHealth } from "../../services/routes";
 import { useLocation } from "../../hooks/router";
 import { ValidatorHelper } from "../../utils/validatorHelper";
 import { CheckBoxField } from "../../components/core/checkBoxField";
@@ -54,13 +56,28 @@ const MembershipReduction: React.FC<IMembershipReductionProps> = ({
   const { id } = match.params;
   const classes = useStyles();
   const { navigate } = useLocation();
-  const member = useGetMember(id);
+  const member = useMember(id);
   const updateMember = useUpdateMember();
 
   return member ? (
     <PageWrapper>
+      <Typography
+        variant="body1"
+        component="span"
+        style={{ margin: "0 auto 1.5rem 0" }}
+      >
+        <IconButton onClick={() => navigate(membershipHealth(id))} size="small">
+          <ArrowBackIos /> Indietro
+        </IconButton>{" "}
+      </Typography>
       <Typography variant="h4" component="h2">
         Riduzioni alla quota di iscrizione
+      </Typography>
+      <Typography component="p">
+        Puoi opzionalmente chiedere una riduzione della quota di iscrizione se
+        hai un basso reddito famigliare, od iscrivi più persone facende parte
+        dello stesso nucleo famigliare. Se non rientri in nessuna di queste
+        categorie clicca su "Vai al pagamento"
       </Typography>
       <Formik
         initialValues={{

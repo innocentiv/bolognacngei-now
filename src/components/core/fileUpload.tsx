@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { DropzoneArea } from "material-ui-dropzone";
 import { useStorage } from "../../hooks/storage";
-import { useGetMember, useUpdateMember } from "../../hooks/membership";
+import { useMember, useUpdateMember } from "../../hooks/membership";
 import {
   List,
   ListItem,
@@ -54,7 +54,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
   memberProperty,
   errors
 }) => {
-  const member = useGetMember(memberId);
+  const member = useMember(memberId);
   const updateMember = useUpdateMember();
   const [uploadFiles, deleteFile] = useStorage(memberProperty);
   const classes = useStyles();

@@ -12,7 +12,7 @@ import { RouteComponentProps } from "react-router";
 import PageWrapper from "../../components/pageWrapper";
 import FileUpload from "../../components/core/fileUpload";
 
-import { useGetMember, useUpdateMember } from "../../hooks/membership";
+import { useMember, useUpdateMember } from "../../hooks/membership";
 import { overview } from "../../services/routes";
 import { useLocation } from "../../hooks/router";
 import { usePaymentIntent } from "../../hooks/stripe";
@@ -64,7 +64,7 @@ const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
   const { id } = match.params;
   const classes = useStyles();
   const { navigate } = useLocation();
-  const member = useGetMember(id);
+  const member = useMember(id);
   const updateMember = useUpdateMember();
   const paymentIntent = usePaymentIntent(member);
 

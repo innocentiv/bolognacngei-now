@@ -36,7 +36,7 @@ export const useCreateMember = () => {
   return createMember;
 };
 
-export const useGetMember = (memberId: string) => {
+export const useMember = (memberId: string) => {
   useFirestoreConnect(() => [{ collection: "members", doc: memberId }]);
   const member = useSelector<StateType, Member>(
     ({ firestore: { ordered } }) =>
@@ -57,7 +57,7 @@ export const useGetMemberList = () => {
   return members;
 };
 
-export const useArchiveMember = (memberId: string) => {
+export const useArchiveMember = () => {
   const updateMember = useUpdateMember();
   const archiveMember = useCallback(
     (memberId: string) => updateMember(memberId, { user: "" }),

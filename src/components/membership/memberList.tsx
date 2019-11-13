@@ -87,6 +87,15 @@ const MemberList: React.FC<IMemberListProps> = props => {
                       : "Iscrizioni da completare"
                   }
                 />
+                {/* <ListItemSecondaryAction>
+                  <IconButton
+                    edge="end"
+                    aria-label="delete"
+                    onClick={() => member.id && archiveMember(member.id)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </ListItemSecondaryAction> */}
               </ListItem>
             </Link>
           );
