@@ -109,6 +109,7 @@ const MembershipData: React.FC<IMembershipDataProps> = ({ match }) => {
           privacyHealth: member.privacyHealth || false
         }}
         validate={values => {
+          const isAdult = values.role === "adult";
           const validator = new ValidatorHelper<Values>(values);
           validator.requireField(
             "name",
@@ -134,10 +135,12 @@ const MembershipData: React.FC<IMembershipDataProps> = ({ match }) => {
             "phone",
             "Devi inserire un numero di telefono"
           );
-          validator.requireField(
-            "tutorName",
-            "Devi inserire il nome del tutore"
-          );
+          if (!isAdult) {
+            validator.requireField(
+              "tutorName",
+              "Devi inserire il nome del tutore"
+            );
+          }
           validator.requireField(
             "noOtherScoutMovements",
             "Devi accettare questo campo per proseguire"
