@@ -40,7 +40,8 @@ const useStyles = makeStyles((theme: Theme) =>
     url: {
       display: "block",
       textDecoration: "none",
-      color: "inherit"
+      color: "inherit",
+      overflow: "hidden"
     },
     error: {
       color: theme.palette.error.main
