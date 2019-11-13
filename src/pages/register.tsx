@@ -126,7 +126,7 @@ const Register: React.FC = () => {
                   disabled={isSubmitting}
                   type="submit"
                 >
-                  Registra un nuovo utente
+                  Registra un nuovo socio
                   {isSubmitting && (
                     <CircularProgress size="1em" className={classes.loading} />
                   )}

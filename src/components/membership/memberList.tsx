@@ -30,8 +30,11 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: theme.palette.grey[100],
       display: "block"
     },
-    complete: {
+    paymentComplete: {
       backgroundColor: "rgb(181, 220, 167)"
+    },
+    tobeverified: {
+      backgroundColor: "rgb(255, 230, 138)"
     }
   })
 );
@@ -39,6 +42,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const MemberList: React.FC<IMemberListProps> = props => {
   const members = useGetMemberList();
   const classes = useStyles();
+
   return members && members.length > 0 ? (
     <>
       <Typography variant="h4" component="h2">
@@ -48,38 +52,45 @@ const MemberList: React.FC<IMemberListProps> = props => {
         Clicca sul nome per modificare l'iscrizione
       </Typography>
       <List className={classes.list}>
-        {members.map((member, index) => (
-          <Link
-            key={index}
-            to={membershipData(member.id)}
-            className={`${classes.item} ${
-              member.paymentStatus ===
-              Enum_Member_Payment_Status.PaymentComplete
-                ? classes.complete
-                : ""
-            }`}
-          >
-            <ListItem>
-              <ListItemAvatar>
-                <Avatar>
-                  <PersonIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary={member.name}
-                secondary={
-                  member.paymentStatus ===
-                  Enum_Member_Payment_Status.PaymentComplete
-                    ? "Iscrizioni e pagamento completati"
-                    : member.paymentStatus ===
-                      Enum_Member_Payment_Status.Tobeverified
-                    ? "Bonifico caricato in attesa di verifica"
-                    : "Iscrizioni da completare"
-                }
-              />
-            </ListItem>
-          </Link>
-        ))}
+        {members.map((member, index) => {
+          const isPaymentComplete =
+            member &&
+            member.paymentStatus === Enum_Member_Payment_Status.PaymentComplete;
+          const isPaymentToBeVerified =
+            member &&
+            member.paymentStatus === Enum_Member_Payment_Status.Tobeverified;
+          return (
+            <Link
+              key={index}
+              to={membershipData(member.id)}
+              className={`${classes.item} ${
+                isPaymentComplete
+                  ? classes.paymentComplete
+                  : isPaymentToBeVerified
+                  ? classes.tobeverified
+                  : ""
+              }`}
+            >
+              <ListItem>
+                <ListItemAvatar>
+                  <Avatar>
+                    <PersonIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  primary={member.name}
+                  secondary={
+                    isPaymentComplete
+                      ? "Iscrizioni e pagamento completati"
+                      : isPaymentToBeVerified
+                      ? "Bonifico caricato in attesa di verifica"
+                      : "Iscrizioni da completare"
+                  }
+                />
+              </ListItem>
+            </Link>
+          );
+        })}
       </List>
     </>
   ) : null;

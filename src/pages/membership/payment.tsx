@@ -68,10 +68,13 @@ const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
   const updateMember = useUpdateMember();
   const paymentIntent = usePaymentIntent(member);
 
-  if (
+  const isPaymentComplete =
     member &&
-    member.paymentStatus === Enum_Member_Payment_Status.PaymentComplete
-  ) {
+    member.paymentStatus === Enum_Member_Payment_Status.PaymentComplete;
+  const isPaymentToBeVerified =
+    member && member.paymentStatus === Enum_Member_Payment_Status.Tobeverified;
+
+  if (isPaymentComplete || isPaymentToBeVerified) {
     return (
       <PageWrapper>
         <Typography variant="h4" component="h2">
@@ -92,6 +95,20 @@ const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
         >
           Vai alla pagina Principale
         </Button>
+        {isPaymentToBeVerified && (
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={() =>
+              updateMember(id, {
+                paymentStatus: Enum_Member_Payment_Status.Needpayment
+              })
+            }
+            className={classes.toOverview}
+          >
+            Modifica i dati di pagamento
+          </Button>
+        )}
         <CreateMember />
       </PageWrapper>
     );
@@ -109,18 +126,37 @@ const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
             setSubmitting(false);
             return;
           }
+
           const paymentResult = await stripe.handleCardPayment(
             paymentIntent.client_secret
           );
+
+          if (
+            paymentResult.paymentIntent &&
+            paymentResult.paymentIntent.status === "succeeded"
+          ) {
+            await updateMember(id, {
+              paymentStatus: Enum_Member_Payment_Status.PaymentComplete
+            });
+            setSubmitting(false);
+            return;
+          }
+
+          if (
+            member.paymentBankTransfert &&
+            member.paymentBankTransfert.length > 0
+          ) {
+            await updateMember(id, {
+              paymentStatus: Enum_Member_Payment_Status.Tobeverified
+            });
+            setSubmitting(false);
+          }
+
           if (paymentResult.error) {
             setStatus({ paymentBankTransfert: paymentResult.error.message });
             setSubmitting(false);
             return;
           }
-          await updateMember(id, {
-            paymentStatus: Enum_Member_Payment_Status.PaymentComplete
-          });
-          setSubmitting(false);
         }}
       >
         {({ isSubmitting, status }: FormikProps<Values>) => {
@@ -133,7 +169,14 @@ const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
               <Typography variant="h6" component="h4">
                 Paga con la carta di Credito
               </Typography>
-              <CardElement className={classes.card} />
+              <CardElement
+                className={classes.card}
+                style={{
+                  base: {
+                    fontSize: "18px"
+                  }
+                }}
+              />
 
               <Typography variant="h6" component="h4">
                 Oppure carica la ricevuta del bonifico
