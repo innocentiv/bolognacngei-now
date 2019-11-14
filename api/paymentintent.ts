@@ -28,6 +28,10 @@ export default async (req: NowRequest, res: NowResponse) => {
     amount = 7500;
   }
 
+  if (member.role === Enum_Member_Role.Supporter) {
+    amount = 5000;
+  }
+
   const paymentIntent = await stripe.paymentIntents.create({
     amount,
     currency: "eur",

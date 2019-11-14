@@ -52,7 +52,15 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: "125%"
     },
     toOverview: {
-      margin: `2em 0`
+      margin: `1rem 0`
+    },
+    modifyPayment: {
+      margin: `1rem 0 4rem`
+    },
+    logo: {
+      display: "block",
+      margin: "1rem auto",
+      width: "40%"
     }
   })
 );
@@ -77,6 +85,7 @@ const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
   if (isPaymentComplete || isPaymentToBeVerified) {
     return (
       <PageWrapper>
+        <img src="/assets/success.png" alt="" className={classes.logo} />
         <Typography variant="h4" component="h2">
           Iscrizione terminata con successo!
         </Typography>
@@ -104,7 +113,7 @@ const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
                 paymentStatus: Enum_Member_Payment_Status.Needpayment
               })
             }
-            className={classes.toOverview}
+            className={classes.modifyPayment}
           >
             Modifica i dati di pagamento
           </Button>

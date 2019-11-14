@@ -1,5 +1,5 @@
 import * as React from "react";
-import { membershipData } from "../../services/routes";
+import { membershipData, membershipSupporter } from "../../services/routes";
 import { Link } from "react-router-dom";
 import { useGetMemberList } from "../../hooks/membership";
 import {
@@ -14,7 +14,10 @@ import {
   createStyles
 } from "@material-ui/core";
 import PersonIcon from "@material-ui/icons/Person";
-import { Enum_Member_Payment_Status } from "../../types/member";
+import {
+  Enum_Member_Payment_Status,
+  Enum_Member_Role
+} from "../../types/member";
 
 interface IMemberListProps {}
 
@@ -62,7 +65,11 @@ const MemberList: React.FC<IMemberListProps> = props => {
           return (
             <Link
               key={index}
-              to={membershipData(member.id)}
+              to={
+                member.role === Enum_Member_Role.Supporter
+                  ? membershipSupporter(member.id)
+                  : membershipData(member.id)
+              }
               className={`${classes.item} ${
                 isPaymentComplete
                   ? classes.paymentComplete
