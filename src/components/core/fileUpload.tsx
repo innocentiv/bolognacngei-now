@@ -31,7 +31,7 @@ interface FileUploadProps {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     list: {
-      margin: `${theme.spacing(1)}px 0 ${theme.spacing(4)}px`
+      margin: `${theme.spacing(1)}px 0 ${theme.spacing(2)}px`
     },
     item: {
       marginBottom: theme.spacing(2),
@@ -128,13 +128,13 @@ const FileUpload: React.FC<FileUploadProps> = ({
           ))}
         </List>
       )}
-      <FormControl>
-        {hasError && (
+      {hasError && (
+        <FormControl>
           <FormHelperText className={classes.error}>
             {errors && errors[memberProperty]}
           </FormHelperText>
-        )}
-      </FormControl>
+        </FormControl>
+      )}
     </>
   );
 };

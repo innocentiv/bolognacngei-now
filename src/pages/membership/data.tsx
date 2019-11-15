@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: "column",
       textAlign: "left",
       "& > *": {
-        marginTop: theme.spacing(2)
+        marginTop: theme.spacing(3)
       }
     },
     loading: {

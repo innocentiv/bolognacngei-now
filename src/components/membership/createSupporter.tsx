@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       flexDirection: "column",
       "& > *": {
-        marginTop: theme.spacing(2)
+        marginTop: theme.spacing(3)
       }
     },
     loading: {
@@ -73,7 +73,7 @@ const CreateMember: React.FC<ICreateMemberProps> = () => {
             <Field
               name="name"
               type="text"
-              label="Inserisci il nome del socio sostenitore"
+              label="Inserisci nome e cognome del socio sostenitore"
               component={TextField}
             />
             <Button

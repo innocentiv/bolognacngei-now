@@ -23,6 +23,7 @@ import {
 } from "react-stripe-elements";
 import { Enum_Member_Payment_Status } from "../../types/member";
 import CreateMember from "../../components/membership/createMember";
+import Loader from "../../components/core/loader";
 
 type IMembershipPaymentProps = RouteComponentProps<{ id: string }> &
   ReactStripeElements.InjectedStripeProps;
@@ -36,17 +37,11 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: "column",
       textAlign: "left",
       "& > *": {
-        marginTop: theme.spacing(2)
+        marginTop: theme.spacing(3)
       }
     },
     loading: {
       marginLeft: theme.spacing(1)
-    },
-    loadingPlaceholder: {
-      minHeight: 300,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center"
     },
     card: {
       fontSize: "125%"
@@ -145,7 +140,8 @@ const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
             paymentResult.paymentIntent.status === "succeeded"
           ) {
             await updateMember(id, {
-              paymentStatus: Enum_Member_Payment_Status.PaymentComplete
+              paymentStatus: Enum_Member_Payment_Status.PaymentComplete,
+              paymentId: paymentResult.paymentIntent.id
             });
             setSubmitting(false);
             return;
@@ -209,9 +205,7 @@ const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
               </Button>
             </Form>
           ) : (
-            <div className={classes.loadingPlaceholder}>
-              <CircularProgress />
-            </div>
+            <Loader />
           );
         }}
       </Formik>

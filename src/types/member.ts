@@ -83,13 +83,14 @@ export type Member = {
   healthDrugsAllergies?: Maybe<string>;
   healthSeasonalAllergies?: Maybe<string>;
   healthMedicalConditions?: Maybe<string>;
+  healthMedicalDocuments?: Maybe<Array<UploadFile>>;
   reductionIsee?: Maybe<boolean>;
   reductionIseeRange?: Maybe<Enum_Member_Reductioniseerange>;
   reductionFamily?: Maybe<boolean>;
   reductionFamilyRelation?: Maybe<Enum_Member_Reductionfamilyrelation>;
   reductionRelativeName?: Maybe<string>;
-  paymentStatus?: Maybe<Enum_Member_Payment_Status>;
-  healthMedicalDocuments?: Maybe<Array<UploadFile>>;
   reductionIseeDocuments?: Maybe<Array<UploadFile>>;
+  paymentStatus?: Maybe<Enum_Member_Payment_Status>;
   paymentBankTransfert?: Maybe<Array<UploadFile>>;
+  paymentId?: string;
 };

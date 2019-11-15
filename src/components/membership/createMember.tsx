@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       flexDirection: "column",
       "& > *": {
-        marginTop: theme.spacing(2)
+        marginTop: theme.spacing(3)
       }
     },
     loading: {
@@ -43,6 +43,10 @@ const CreateMember: React.FC<ICreateMemberProps> = () => {
     <>
       <Typography variant="h4" component="h2">
         Registra un nuovo socio
+      </Typography>
+      <Typography component="p">
+        Inserisci nome e cognome del socio da iscrivere. Assicurati di avere con
+        te tutta la documentazione necessaria prima di proseguire.
       </Typography>
       <Formik
         initialValues={{
@@ -66,7 +70,7 @@ const CreateMember: React.FC<ICreateMemberProps> = () => {
             <Field
               name="name"
               type="text"
-              label="Inserisci il nome dello scout"
+              label="Inserisci nome e cognome dello scout"
               component={TextField}
             />
             <Button
