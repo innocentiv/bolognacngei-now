@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { paymentIntents } from "stripe";
-import { Member } from "../types/member";
+import { Member, Enum_Member_Payment_Status } from "../types/member";
 
 export const usePaymentIntent = (member: Member) => {
   const [paymentIntent, setPaymentIntent] = useState<
@@ -20,9 +20,21 @@ export const usePaymentIntent = (member: Member) => {
       return (await rawResponse.json()) as paymentIntents.IPaymentIntent;
     };
 
-    getPaymentIntent(member)
-      .then(paymentIntent => setPaymentIntent(paymentIntent))
-      .catch(error => console.error(error));
+    let paymentRequestStale = false;
+    if (
+      member.paymentStatus !== Enum_Member_Payment_Status.PaymentComplete &&
+      member.paymentStatus !== Enum_Member_Payment_Status.Tobeverified
+    ) {
+      getPaymentIntent(member)
+        .then(paymentIntent => {
+          if (paymentRequestStale) return;
+          setPaymentIntent(paymentIntent);
+        })
+        .catch(error => console.error(error));
+    }
+    return () => {
+      paymentRequestStale = true;
+    };
   }, [member]);
 
   return paymentIntent;
