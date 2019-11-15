@@ -18,6 +18,7 @@ import {
   Enum_Member_Payment_Status,
   Enum_Member_Role
 } from "../../types/member";
+import Welcome from "./welcome";
 
 interface IMemberListProps {}
 
@@ -109,7 +110,9 @@ const MemberList: React.FC<IMemberListProps> = props => {
         })}
       </List>
     </>
-  ) : null;
+  ) : (
+    <Welcome />
+  );
 };
 
 export default MemberList;

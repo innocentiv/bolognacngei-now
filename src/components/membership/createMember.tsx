@@ -11,7 +11,7 @@ import {
   Typography
 } from "@material-ui/core";
 import { TextField } from "formik-material-ui";
-import { useLocation } from "../../hooks/router";
+import { useNavigate } from "../../hooks/router";
 
 interface ICreateMemberProps {}
 
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const CreateMember: React.FC<ICreateMemberProps> = () => {
   const createMember = useCreateMember();
   const classes = useStyles();
-  const { navigate } = useLocation();
+  const navigate = useNavigate();
 
   interface Values {
     name: string;

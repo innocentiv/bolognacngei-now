@@ -1,18 +1,8 @@
-import { useContext, useCallback } from "react";
-import { __RouterContext as RouterContext } from "react-router";
+import { useCallback } from "react";
+import { useHistory } from "react-router";
 
-export const useRouter = () => {
-  return useContext(RouterContext);
-};
-
-export const useParams = () => {
-  const { match } = useRouter();
-  return match.params;
-};
-
-export const useLocation = () => {
-  const { location, history } = useRouter();
-
+export const useNavigate = () => {
+  const history = useHistory();
   const navigate = useCallback(
     (to: string, replace: boolean = false) => {
       if (replace) {
@@ -24,8 +14,5 @@ export const useLocation = () => {
     [history]
   );
 
-  return {
-    location,
-    navigate
-  };
+  return navigate;
 };

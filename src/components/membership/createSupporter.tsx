@@ -11,7 +11,7 @@ import {
   Typography
 } from "@material-ui/core";
 import { TextField } from "formik-material-ui";
-import { useLocation } from "../../hooks/router";
+import { useNavigate } from "../../hooks/router";
 import { Enum_Member_Role } from "../../types/member";
 
 interface ICreateMemberProps {}
@@ -35,7 +35,7 @@ const CreateMember: React.FC<ICreateMemberProps> = () => {
   const createMember = useCreateMember();
   const updateMember = useUpdateMember();
   const classes = useStyles();
-  const { navigate } = useLocation();
+  const navigate = useNavigate();
 
   interface Values {
     name: string;
@@ -43,7 +43,7 @@ const CreateMember: React.FC<ICreateMemberProps> = () => {
 
   return (
     <>
-      <Typography variant="h5" component="h3">
+      <Typography variant="h4" component="h2">
         Diventa socio sostenitore
       </Typography>
       <Typography component="p">

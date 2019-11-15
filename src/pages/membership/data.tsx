@@ -15,7 +15,7 @@ import { RouteComponentProps } from "react-router";
 import PageWrapper from "../../components/pageWrapper";
 import { useMember, useUpdateMember } from "../../hooks/membership";
 import { membershipHealth, overview } from "../../services/routes";
-import { useLocation } from "../../hooks/router";
+import { useNavigate } from "../../hooks/router";
 import { ValidatorHelper } from "../../utils/validatorHelper";
 import { CheckBoxField } from "../../components/core/checkBoxField";
 import { SelectField } from "../../components/core/selectField";
@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const MembershipData: React.FC<IMembershipDataProps> = ({ match }) => {
   const { id } = match.params;
   const classes = useStyles();
-  const { navigate } = useLocation();
+  const navigate = useNavigate();
   const member = useMember(id);
   const updateMember = useUpdateMember();
 

@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Paper, makeStyles, Theme, createStyles } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
-import { useScrollIntoView } from "../hooks/ui";
 import { useUser } from "../hooks/auth";
 import Loader from "./core/loader";
 
@@ -27,12 +26,11 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const PageWrapper: React.FC = ({ children }) => {
-  const ref = useScrollIntoView<HTMLDivElement>();
   const user = useUser();
   const classes = useStyles();
 
   return (
-    <Grid container justify="center" className={classes.container} ref={ref}>
+    <Grid container justify="center" className={classes.container}>
       <Grid item className={classes.item}>
         <Paper className={classes.wrapper}>
           {user.isLoaded ? children : <Loader />}

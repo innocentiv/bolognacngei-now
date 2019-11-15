@@ -14,7 +14,7 @@ import { RouteComponentProps } from "react-router";
 import PageWrapper from "../../components/pageWrapper";
 import { useMember, useUpdateMember } from "../../hooks/membership";
 import { overview, membershipPayment } from "../../services/routes";
-import { useLocation } from "../../hooks/router";
+import { useNavigate } from "../../hooks/router";
 import { ValidatorHelper } from "../../utils/validatorHelper";
 import { CheckBoxField } from "../../components/core/checkBoxField";
 import ArrowBackIos from "@material-ui/icons/ArrowBackIos";
@@ -65,7 +65,7 @@ const MembershipSupporter: React.FC<IMembershipSupporterProps> = ({
 }) => {
   const { id } = match.params;
   const classes = useStyles();
-  const { navigate } = useLocation();
+  const navigate = useNavigate();
   const member = useMember(id);
   const updateMember = useUpdateMember();
 

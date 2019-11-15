@@ -18,7 +18,7 @@ import ArrowBackIos from "@material-ui/icons/ArrowBackIos";
 
 import { useMember, useUpdateMember } from "../../hooks/membership";
 import { membershipPayment, membershipHealth } from "../../services/routes";
-import { useLocation } from "../../hooks/router";
+import { useNavigate } from "../../hooks/router";
 import { ValidatorHelper } from "../../utils/validatorHelper";
 import { CheckBoxField } from "../../components/core/checkBoxField";
 import { SelectField } from "../../components/core/selectField";
@@ -55,7 +55,7 @@ const MembershipReduction: React.FC<IMembershipReductionProps> = ({
 }) => {
   const { id } = match.params;
   const classes = useStyles();
-  const { navigate } = useLocation();
+  const navigate = useNavigate();
   const member = useMember(id);
   const updateMember = useUpdateMember();
 

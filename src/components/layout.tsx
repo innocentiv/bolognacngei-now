@@ -1,4 +1,4 @@
-import { AppBar, Button, Toolbar, Typography } from "@material-ui/core";
+import { AppBar, Button, Toolbar, Typography, Avatar } from "@material-ui/core";
 import makeStyles from "@material-ui/styles/makeStyles";
 import * as React from "react";
 import { useAuthActions, useUser } from "../hooks/auth";
@@ -16,7 +16,8 @@ import {
 import ButtonLink from "./buttonLink";
 import { PrivateRoute } from "./privateRoute";
 import { RedirectUserRoute } from "./redirectUserRoute";
-import { Link, Redirect, Route } from "react-router-dom";
+import { Link, Redirect, Route, useLocation } from "react-router-dom";
+import { useScrollIntoView } from "../hooks/ui";
 
 const useStyles = makeStyles({
   title: {
@@ -24,7 +25,8 @@ const useStyles = makeStyles({
     "& > a": {
       color: "inherit",
       textDecoration: "none"
-    }
+    },
+    marginLeft: "1em"
   }
 });
 
@@ -32,10 +34,14 @@ const Layout: React.FC<{}> = () => {
   const { logout } = useAuthActions();
   const classes = useStyles();
   const user = useUser();
+  const location = useLocation();
+  const ref = useScrollIntoView<HTMLDivElement>([location]);
+
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="static" ref={ref}>
         <Toolbar>
+          <Avatar src="/assets/cngei-logo.png" alt="" />
           <Typography variant="h6" className={classes.title}>
             <Link to={home()}>Bologna CNGEI Iscrizioni</Link>
           </Typography>

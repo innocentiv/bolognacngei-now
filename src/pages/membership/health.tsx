@@ -23,7 +23,7 @@ import {
   membershipPayment,
   membershipData
 } from "../../services/routes";
-import { useLocation } from "../../hooks/router";
+import { useNavigate } from "../../hooks/router";
 import { ValidatorHelper } from "../../utils/validatorHelper";
 import { CheckBoxField } from "../../components/core/checkBoxField";
 import { Enum_Member_Payment_Status } from "../../types/member";
@@ -68,7 +68,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const MembershipHealth: React.FC<IMembershipHealthProps> = ({ match }) => {
   const { id } = match.params;
   const classes = useStyles();
-  const { navigate } = useLocation();
+  const navigate = useNavigate();
   const member = useMember(id);
   const updateMember = useUpdateMember();
 

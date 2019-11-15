@@ -1,6 +1,6 @@
 import { useRef, useEffect } from "react";
 
-export const useScrollIntoView = <T extends Element>(deps = []) => {
+export const useScrollIntoView = <T extends Element>(deps: any = []) => {
   const elementRef = useRef<T>(null);
   useEffect(() => {
     elementRef.current && elementRef.current.scrollIntoView(true);

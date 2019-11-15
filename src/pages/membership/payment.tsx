@@ -14,7 +14,7 @@ import FileUpload from "../../components/core/fileUpload";
 
 import { useMember, useUpdateMember } from "../../hooks/membership";
 import { overview } from "../../services/routes";
-import { useLocation } from "../../hooks/router";
+import { useNavigate } from "../../hooks/router";
 import { usePaymentIntent } from "../../hooks/stripe";
 import {
   injectStripe,
@@ -66,7 +66,7 @@ const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
 }) => {
   const { id } = match.params;
   const classes = useStyles();
-  const { navigate } = useLocation();
+  const navigate = useNavigate();
   const member = useMember(id);
   const updateMember = useUpdateMember();
   const paymentIntent = usePaymentIntent(member);
@@ -79,42 +79,46 @@ const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
 
   if (isPaymentComplete || isPaymentToBeVerified) {
     return (
-      <PageWrapper>
-        <img src="/assets/success.png" alt="" className={classes.logo} />
-        <Typography variant="h4" component="h2">
-          Iscrizione terminata con successo!
-        </Typography>
-        <Typography component="p">
-          I dati di {member.name} sono stati salvati in archivio e puoi
-          modificarli in ogni momento utilizzando la mail e la password che hai
-          usato per registrarti. Per quanto i dati siano stati salvati
-          correttamente potresti essere ricontattato/a per confermare documenti
-          o dettagli. Per ora é tutto fatto, buona caccia!
-        </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => navigate(overview())}
-          className={classes.toOverview}
-        >
-          Vai alla pagina Principale
-        </Button>
-        {isPaymentToBeVerified && (
+      <>
+        <PageWrapper>
+          <img src="/assets/success.png" alt="" className={classes.logo} />
+          <Typography variant="h4" component="h2">
+            Iscrizione terminata con successo!
+          </Typography>
+          <Typography component="p">
+            I dati di {member.name} sono stati salvati in archivio e puoi
+            modificarli in ogni momento utilizzando la mail e la password che
+            hai usato per registrarti. Per quanto i dati siano stati salvati
+            correttamente potresti essere ricontattato/a per confermare
+            documenti o dettagli. Per ora é tutto fatto, buona caccia!
+          </Typography>
           <Button
-            variant="outlined"
+            variant="contained"
             color="primary"
-            onClick={() =>
-              updateMember(id, {
-                paymentStatus: Enum_Member_Payment_Status.Needpayment
-              })
-            }
-            className={classes.modifyPayment}
+            onClick={() => navigate(overview())}
+            className={classes.toOverview}
           >
-            Modifica i dati di pagamento
+            Vai alla pagina Principale
           </Button>
-        )}
-        <CreateMember />
-      </PageWrapper>
+          {isPaymentToBeVerified && (
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() =>
+                updateMember(id, {
+                  paymentStatus: Enum_Member_Payment_Status.Needpayment
+                })
+              }
+              className={classes.modifyPayment}
+            >
+              Modifica i dati di pagamento
+            </Button>
+          )}
+        </PageWrapper>
+        <PageWrapper>
+          <CreateMember />
+        </PageWrapper>
+      </>
     );
   }
 
