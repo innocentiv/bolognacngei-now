@@ -238,6 +238,7 @@ const MembershipData: React.FC<IMembershipDataProps> = ({ match }) => {
                 type="date"
                 label="Data di nascita socio da censire"
                 component={TextField}
+                helperText="nel formato: Via o Piazza, Città, CAP, Provincia"
               />
               <Field
                 name="address"

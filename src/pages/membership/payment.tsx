@@ -200,7 +200,7 @@ const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
               />
               <Typography variant="body2" component="p">
                 Il pagamento della quota con carta di credito avviene tramite la
-                creazione di una richiesta di pagamento ona tantum tramite il
+                creazione di una richiesta di pagamento una tantum tramite il
                 servizio di pagamenti{" "}
                 <a
                   href="https://stripe.com/it/payments"

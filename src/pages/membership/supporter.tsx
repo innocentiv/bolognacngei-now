@@ -206,6 +206,7 @@ const MembershipSupporter: React.FC<IMembershipSupporterProps> = ({
                 type="text"
                 label="Indirizzo socio da censire"
                 component={TextField}
+                helperText="nel formato: Via o Piazza, Città, CAP, Provincia"
               />
               <Field
                 name="fiscalCode"
