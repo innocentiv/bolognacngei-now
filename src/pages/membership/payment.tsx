@@ -4,7 +4,8 @@ import {
   Typography,
   makeStyles,
   Theme,
-  createStyles
+  createStyles,
+  Tooltip
 } from "@material-ui/core";
 import { Form, Formik, FormikProps } from "formik";
 import * as React from "react";
@@ -67,7 +68,7 @@ const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
   const { id } = match.params;
   const classes = useStyles();
   const navigate = useNavigate();
-  const member = useMember(id);
+  const [member] = useMember(id);
   const updateMember = useUpdateMember();
   const paymentIntent = usePaymentIntent(member);
 
@@ -178,6 +179,17 @@ const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
               <Typography variant="h6" component="h4">
                 Paga con la carta di Credito
               </Typography>
+              <Typography component="p">
+                Inserisci il numero della carta di credito seguito dalla data di
+                scadenza e dal{" "}
+                <Tooltip
+                  title="Sulle carte di credito (Visa, MasterCard) si tratta delle ultime tre cifre del numero che si trova nell’area della firma sul retro della carta"
+                  aria-label="cvv"
+                >
+                  <span>CVC/CVV</span>
+                </Tooltip>
+              </Typography>
+
               <CardElement
                 className={classes.card}
                 style={{
@@ -186,9 +198,44 @@ const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
                   }
                 }}
               />
+              <Typography variant="body2" component="p">
+                Il pagamento della quota con carta di credito avviene tramite la
+                creazione di una richiesta di pagamento ona tantum tramite il
+                servizio di pagamenti{" "}
+                <a
+                  href="https://stripe.com/it/payments"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Stripe
+                </a>
+                . Non conserviamo il numero della carta di credito e non
+                condividiamo con Stripe nessun dato sensibile degli iscritti.
+              </Typography>
 
               <Typography variant="h6" component="h4">
                 Oppure carica la ricevuta del bonifico
+              </Typography>
+              <Typography component="p">
+                Effettua un pagamento tramite bonifico alle seguenti coordinate
+                bancarie:
+                <dl>
+                  <dt>
+                    <b>IBAN: </b>
+                  </dt>
+                  <dd>IT25E0306909606100000060610</dd>
+                  <dt>
+                    <b>Beneficiario: </b>
+                  </dt>
+                  <dd>“CNGEI Sezione di Bologna”</dd>
+                  <dt>
+                    <b>Causale: </b>
+                  </dt>
+                  <dd>
+                    ”Nome Cognome ruolo 19/20”
+                    <br />( es:“Paolino Paperino lupetto 19/20”).
+                  </dd>
+                </dl>
               </Typography>
               <FileUpload
                 memberId={id}

@@ -54,7 +54,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
   memberProperty,
   errors
 }) => {
-  const member = useMember(memberId);
+  const [member] = useMember(memberId);
   const updateMember = useUpdateMember();
   const [uploadFiles, deleteFile] = useStorage(memberProperty);
   const classes = useStyles();

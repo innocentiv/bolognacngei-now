@@ -18,7 +18,7 @@ import {
   Enum_Member_Payment_Status,
   Enum_Member_Role
 } from "../../types/member";
-import Welcome from "./welcome";
+import Loader from "../core/loader";
 
 interface IMemberListProps {}
 
@@ -44,8 +44,16 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const MemberList: React.FC<IMemberListProps> = props => {
-  const members = useGetMemberList();
+  const [members, loaded, empty] = useGetMemberList();
   const classes = useStyles();
+
+  if (!loaded) {
+    return <Loader />;
+  }
+
+  if (empty) {
+    return null;
+  }
 
   return members && members.length > 0 ? (
     <>
@@ -110,9 +118,7 @@ const MemberList: React.FC<IMemberListProps> = props => {
         })}
       </List>
     </>
-  ) : (
-    <Welcome />
-  );
+  ) : null;
 };
 
 export default MemberList;

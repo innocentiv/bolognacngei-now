@@ -66,7 +66,7 @@ const MembershipSupporter: React.FC<IMembershipSupporterProps> = ({
   const { id } = match.params;
   const classes = useStyles();
   const navigate = useNavigate();
-  const member = useMember(id);
+  const [member] = useMember(id);
   const updateMember = useUpdateMember();
 
   return member ? (
@@ -115,8 +115,6 @@ const MembershipSupporter: React.FC<IMembershipSupporterProps> = ({
             "name",
             "Devi inserire Nome e Cognome del socio"
           );
-          validator.requireField("group", "Devi selezionare un gruppo");
-          validator.requireField("role", "Devi indicare la fascia d'età");
           validator.requireField(
             "birthplace",
             "Devi inserire il luogo di nascita"

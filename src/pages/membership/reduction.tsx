@@ -56,7 +56,7 @@ const MembershipReduction: React.FC<IMembershipReductionProps> = ({
   const { id } = match.params;
   const classes = useStyles();
   const navigate = useNavigate();
-  const member = useMember(id);
+  const [member] = useMember(id);
   const updateMember = useUpdateMember();
 
   return member ? (

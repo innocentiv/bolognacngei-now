@@ -1,5 +1,10 @@
 import { useCallback } from "react";
-import { useFirestore, useFirestoreConnect } from "react-redux-firebase";
+import {
+  useFirestore,
+  useFirestoreConnect,
+  isLoaded,
+  isEmpty
+} from "react-redux-firebase";
 import { Member } from "../types/member";
 import { useSelector } from "react-redux";
 import { StateType } from "../store";
@@ -43,7 +48,9 @@ export const useMember = (memberId: string) => {
       ordered.members &&
       ordered.members.find((member: Member) => member.id === memberId)
   );
-  return member;
+  const loaded = isLoaded(member);
+  const empty = isEmpty(member);
+  return [member, loaded, empty] as const;
 };
 
 export const useGetMemberList = () => {
@@ -54,7 +61,9 @@ export const useGetMemberList = () => {
   const members = useSelector<StateType, Member[]>(
     ({ firestore: { ordered } }) => ordered.members
   );
-  return members;
+  const loaded = isLoaded(members);
+  const empty = isEmpty(members);
+  return [members, loaded, empty] as const;
 };
 
 export const useArchiveMember = () => {

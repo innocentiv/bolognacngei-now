@@ -4,6 +4,7 @@ import MemberList from "../components/membership/memberList";
 import CreateMember from "../components/membership/createMember";
 import CreateSupporter from "../components/membership/createSupporter";
 import PageWrapper from "../components/pageWrapper";
+import PrivateArea from "../components/membership/privateArea";
 
 const Overview: React.FC = () => {
   const user = useUser();
@@ -12,6 +13,7 @@ const Overview: React.FC = () => {
       {user && (
         <>
           <PageWrapper>
+            <PrivateArea />
             <MemberList />
           </PageWrapper>
           <PageWrapper>
