@@ -51,10 +51,12 @@ const Login: React.FC = () => {
       </PageWrapper>
       <PageWrapper>
         <Typography variant="h4" component="h2">
-          Modifica un iscrizione
+          Modifica le iscrizioni di quest'anno
         </Typography>
         <Typography component="p">
-          Inserisci utente e password per gestire le iscrizioni
+          Inserisci utente e password per gestire l'iscrizione di quest'anno
+          scout. Se non ti sei ancora registrato quest'anno clicca sul bottone
+          in fondo alla pagina
         </Typography>
         <Formik
           initialValues={{
@@ -117,7 +119,7 @@ const Login: React.FC = () => {
                 color="primary"
                 className={classes.link}
               >
-                Mai entrato prima? Registrati
+                Non ti sei ancora registrato quest'anno? Registrati
               </ButtonLink>
             </Form>
           )}

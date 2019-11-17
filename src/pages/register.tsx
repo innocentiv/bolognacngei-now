@@ -52,9 +52,13 @@ const Register: React.FC = () => {
       </PageWrapper>
       <PageWrapper>
         <Typography variant="h4" component="h2">
-          Nuova Iscrizione
+          Registrazione adulto o tutore
         </Typography>
-        <Typography component="p">Registra un nuovo socio.</Typography>
+        <Typography component="p">
+          Registrati come adulto o tutore per proseguire le iscrizioni. Nota, le
+          credenziali di accesso di due anni fa non sono più valide, dovrai
+          quindi registrare un nuovo utente per le iscrizioni di quest'anno.
+        </Typography>
         <Formik
           initialValues={{
             email: "",
@@ -135,7 +139,7 @@ const Register: React.FC = () => {
           color="primary"
           className={classes.link}
         >
-          Ti sei già registrato? Clicca per Entrare
+          Ti sei già registrato? Clicca per entrare
         </ButtonLink>
       </PageWrapper>
     </>

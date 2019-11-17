@@ -13,6 +13,21 @@ export const useAuthError = () =>
 
 export const useAuthActions = () => {
   const firebase = useFirebase();
+  const isEmailRegistered = useCallback(
+    async (email: string) => {
+      try {
+        const availableMethod = await firebase
+          .auth()
+          .fetchSignInMethodsForEmail(email);
+        if (Array.isArray(availableMethod) && availableMethod.length > 0)
+          return true;
+        return false;
+      } catch {
+        return false;
+      }
+    },
+    [firebase]
+  );
 
   const login = useCallback(
     (email: string, password: string) => firebase.login({ email, password }),
@@ -29,11 +44,11 @@ export const useAuthActions = () => {
 
   const forgot = useCallback(
     (email: string) =>
-      ((firebase.resetPassword as unknown) as ((
-        email: string
-      ) => Promise<any>))(email),
+      ((firebase.resetPassword as unknown) as (email: string) => Promise<any>)(
+        email
+      ),
     [firebase]
   );
 
-  return { login, logout, register, forgot };
+  return { login, logout, register, forgot, isEmailRegistered };
 };
