@@ -28,7 +28,7 @@ export const useUpdateMember = () => {
 
 export const useCreateMember = () => {
   const firestore = useFirestore();
-  const user = useUser();
+  const [user] = useUser();
 
   const createMember = useCallback(
     (name: string) => {
@@ -54,7 +54,7 @@ export const useMember = (memberId: string) => {
 };
 
 export const useGetMemberList = () => {
-  const user = useUser();
+  const [user] = useUser();
   useFirestoreConnect(() => [
     { collection: "members", where: [["user", "==", user.uid]] }
   ]);

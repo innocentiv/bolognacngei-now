@@ -5,7 +5,7 @@ import { useUser } from "../../hooks/auth";
 interface IPrivateAreaProps {}
 
 const PrivateArea: React.FC<IPrivateAreaProps> = () => {
-  const user = useUser();
+  const [user] = useUser();
   return (
     <>
       <Typography variant="h4" component="h2">

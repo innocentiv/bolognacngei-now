@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const PageWrapper: React.FC = ({ children }) => {
-  const user = useUser();
+  const [user] = useUser();
   const classes = useStyles();
 
   return (

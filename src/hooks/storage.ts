@@ -4,7 +4,7 @@ import { useFirebase } from "react-redux-firebase";
 import { UploadFile } from "../types/member";
 
 export const useStorage = (folder?: string) => {
-  const user = useUser();
+  const [user] = useUser();
   const filesPath = folder ? `${user.uid}/${folder}` : user.uid;
   const firebase = useFirebase();
 

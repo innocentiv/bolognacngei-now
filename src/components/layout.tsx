@@ -33,7 +33,7 @@ const useStyles = makeStyles({
 const Layout: React.FC<{}> = () => {
   const { logout } = useAuthActions();
   const classes = useStyles();
-  const user = useUser();
+  const [user] = useUser();
   const location = useLocation();
   const ref = useScrollIntoView<HTMLDivElement>([location]);
 

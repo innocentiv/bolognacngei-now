@@ -7,7 +7,7 @@ import PageWrapper from "../components/pageWrapper";
 import PrivateArea from "../components/membership/privateArea";
 
 const Overview: React.FC = () => {
-  const user = useUser();
+  const [user] = useUser();
   return (
     <div>
       {user && (

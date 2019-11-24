@@ -1,18 +1,28 @@
 import { useCallback } from "react";
 import { useSelector } from "react-redux";
-import { useFirebase, FirebaseReducer } from "react-redux-firebase";
+import {
+  useFirebase,
+  FirebaseReducer,
+  isLoaded,
+  isEmpty
+} from "react-redux-firebase";
 import { StateType } from "../store";
 
-export const useUser = () =>
-  useSelector<StateType, FirebaseReducer.AuthState>(
+export const useUser = () => {
+  const user = useSelector<StateType, FirebaseReducer.AuthState>(
     state => state.firebase.auth
   );
+  const loaded = isLoaded(user);
+  const empty = isEmpty(user);
+  return [user, loaded, empty] as const;
+};
 
 export const useAuthError = () =>
   useSelector<StateType, any>(state => state.firebase.authError);
 
 export const useAuthActions = () => {
   const firebase = useFirebase();
+
   const isEmailRegistered = useCallback(
     async (email: string) => {
       try {
