@@ -60,5 +60,18 @@ export const useAuthActions = () => {
     [firebase]
   );
 
-  return { login, logout, register, forgot, isEmailRegistered };
+  const confirmPasswordReset = useCallback(
+    (code: string, newPassword: string) =>
+      firebase.confirmPasswordReset(code, newPassword),
+    [firebase]
+  );
+
+  return {
+    login,
+    logout,
+    register,
+    forgot,
+    isEmailRegistered,
+    confirmPasswordReset
+  };
 };

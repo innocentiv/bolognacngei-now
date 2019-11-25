@@ -1,7 +1,8 @@
-export const login = () => "/login";
-export const register = () => "/register";
-export const overview = () => "/overview";
 export const home = () => "/";
+export const overview = () => "/overview";
+export const auth = () => "/auth";
+export const authForgot = (code = ":code") => `/auth/forgot/${code}`;
+export const authHandler = () => "/auth/handler";
 export const membership = () => "/membership";
 export const membershipSupporter = (id = ":id") =>
   `/membership/${id}/supporter`;

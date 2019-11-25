@@ -12,6 +12,7 @@
     "graphql-hooks": "^4.0.2",
     "graphql-hooks-memcache": "^1.2.4",
     "material-ui-dropzone": "^2.4.7",
+    "notistack": "^0.9.6",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-redux": "^7.1.3",

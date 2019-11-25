@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useHistory } from "react-router";
+import { useHistory, useLocation } from "react-router-dom";
 
 export const useNavigate = () => {
   const history = useHistory();
@@ -15,4 +15,8 @@ export const useNavigate = () => {
   );
 
   return navigate;
+};
+
+export const useQuery = () => {
+  return new URLSearchParams(useLocation().search);
 };

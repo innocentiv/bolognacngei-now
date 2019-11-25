@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Redirect, Route, RouteProps } from "react-router";
 import { useUser } from "../hooks/auth";
-import { register } from "../services/routes";
+import { auth } from "../services/routes";
 import Loader from "./core/loader";
 
 export const PrivateRoute: React.FC<RouteProps> = ({
@@ -18,7 +18,7 @@ export const PrivateRoute: React.FC<RouteProps> = ({
           return (
             <Redirect
               to={{
-                pathname: register(),
+                pathname: auth(),
                 state: { from: props.location }
               }}
             />

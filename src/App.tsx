@@ -10,6 +10,7 @@ import { theme } from "./theme";
 import { CssBaseline } from "@material-ui/core";
 import { ReactReduxFirebaseProvider } from "react-redux-firebase";
 import { StripeProvider } from "react-stripe-elements";
+import { SnackbarProvider } from "notistack";
 
 const App: React.FC = () => {
   return (
@@ -22,7 +23,9 @@ const App: React.FC = () => {
           <Provider store={store}>
             <ReactReduxFirebaseProvider {...rrfProps}>
               <ClientContext.Provider value={client}>
-                <Layout />
+                <SnackbarProvider maxSnack={3}>
+                  <Layout />
+                </SnackbarProvider>
               </ClientContext.Provider>
             </ReactReduxFirebaseProvider>
           </Provider>
