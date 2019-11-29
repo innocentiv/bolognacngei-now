@@ -8,6 +8,7 @@ import {
   Enum_Member_Role
 } from "../types/member";
 import { Maybe } from "../types/utils";
+import { database } from "firebase";
 
 export const getGroupMemberList = async (
   firestore: ExtendedFirestoreInstance,
@@ -79,15 +80,25 @@ export const mapBooleanToExport = (value?: Maybe<boolean>) => {
   return value ? "Vero" : "Falso";
 };
 
+export const mapDateToExport = (date: string) => {
+  const isoDate = new Date(
+    date.replace(/(\d{1,2})\/(\d{1,2})\/(\d{2,4})/, "$2/$1/$3")
+  );
+  return isoDate.toLocaleDateString("it");
+};
+
 export const mapMemberToExport = (
   member: Member
 ): { [key: string]: string | null | undefined } => ({
-  "Stato Pagamento": mapPaymentToExport(member.paymentStatus),
+  "Stato Pagamento": mapPaymentToExport(
+    member.paymentStatus,
+    Enum_Member_Payment_Status.Needpayment
+  ),
   Nome: member.name,
   Gruppo: mapGroupToExport(member.group),
   Ruolo: mapRoleToExport(member.role),
   "Luogo di nascita": member.birthplace,
-  "Data di Nascita": member.birthdate,
+  "Data di Nascita": mapDateToExport(member.birthdate),
   Indirizzo: member.address,
   "Codice Fiscale": member.fiscalCode,
   Email: member.email,
