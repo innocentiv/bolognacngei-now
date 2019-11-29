@@ -80,11 +80,26 @@ export const mapBooleanToExport = (value?: Maybe<boolean>) => {
   return value ? "Vero" : "Falso";
 };
 
+export const isValidDate = (date: Date) => {
+  return date instanceof Date && !isNaN(date.getTime());
+};
+
+export const dateStringToDate = (date: string) => {
+  return new Date(date.replace(/(\d{1,2})\/(\d{1,2})\/(\d{2,4})/, "$2/$1/$3"));
+};
+
+export const dateToIsoDate = (date: string) => {
+  const dateObj = dateStringToDate(date);
+  return isValidDate(dateObj)
+    ? new Date(dateObj.getTime() - dateObj.getTimezoneOffset() * 60000)
+        .toISOString()
+        .substring(0, 10)
+    : "";
+};
+
 export const mapDateToExport = (date: string) => {
-  const isoDate = new Date(
-    date.replace(/(\d{1,2})\/(\d{1,2})\/(\d{2,4})/, "$2/$1/$3")
-  );
-  return isoDate.toLocaleDateString("it");
+  const dateObj = dateStringToDate(date);
+  return isValidDate(dateObj) ? dateObj.toLocaleDateString("it") : "";
 };
 
 export const mapMemberToExport = (
@@ -98,7 +113,7 @@ export const mapMemberToExport = (
   Gruppo: mapGroupToExport(member.group),
   Ruolo: mapRoleToExport(member.role),
   "Luogo di nascita": member.birthplace,
-  "Data di Nascita": mapDateToExport(member.birthdate),
+  "Data di Nascita": member.birthdate && mapDateToExport(member.birthdate),
   Indirizzo: member.address,
   "Codice Fiscale": member.fiscalCode,
   Email: member.email,
