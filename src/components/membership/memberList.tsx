@@ -1,7 +1,7 @@
 import * as React from "react";
 import { membershipData, membershipSupporter } from "../../services/routes";
 import { Link } from "react-router-dom";
-import { useGetMemberList } from "../../hooks/membership";
+import { useGetUserMemberList } from "../../hooks/membership";
 import {
   Typography,
   List,
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const MemberList: React.FC<IMemberListProps> = props => {
-  const [members, loaded, empty] = useGetMemberList();
+  const [members, loaded, empty] = useGetUserMemberList();
   const classes = useStyles();
 
   if (!loaded) {

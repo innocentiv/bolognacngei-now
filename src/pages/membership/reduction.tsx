@@ -206,7 +206,7 @@ const MembershipReduction: React.FC<IMembershipReductionProps> = ({
                   </Typography>
                   <CheckBoxField<Values>
                     name="reductionFamily"
-                    label="Dichiaro che iscriverò per l'anno scout 2018 - 2019 almeno due membri dello stesso nucleo famigliare"
+                    label="Dichiaro che iscriverò per l'anno scout 2019 - 2020 almeno due membri dello stesso nucleo famigliare"
                     errors={errors}
                   />
 

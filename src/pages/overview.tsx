@@ -5,6 +5,7 @@ import CreateMember from "../components/membership/createMember";
 import CreateSupporter from "../components/membership/createSupporter";
 import PageWrapper from "../components/pageWrapper";
 import PrivateArea from "../components/membership/privateArea";
+import GroupsDownload from "../components/membership/groupsDownload";
 
 const Overview: React.FC = () => {
   const [user] = useUser();
@@ -15,6 +16,7 @@ const Overview: React.FC = () => {
           <PageWrapper>
             <PrivateArea />
             <MemberList />
+            <GroupsDownload />
           </PageWrapper>
           <PageWrapper>
             <CreateMember />

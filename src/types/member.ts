@@ -1,4 +1,4 @@
-export type Maybe<T> = T | null;
+import { Maybe } from "./utils";
 
 export type Reference = string;
 export type UploadFile = {

@@ -11,3 +11,4 @@ export const membershipHealth = (id = ":id") => `/membership/${id}/health`;
 export const membershipReduction = (id = ":id") =>
   `/membership/${id}/reduction`;
 export const membershipPayment = (id = ":id") => `/membership/${id}/payment`;
+export const permission = () => "/permission";

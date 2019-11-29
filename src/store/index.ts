@@ -36,7 +36,8 @@ const rootReducer = combineReducers<{
 const rrfConfig = {
   //userProfile: "users",
   //useFirestoreForProfile: true
-};
+  allowMultipleListeners: true
+} as any;
 
 const initialState = {};
 export const store = createStore(
