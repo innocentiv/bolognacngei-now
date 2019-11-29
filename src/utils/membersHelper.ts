@@ -1,5 +1,9 @@
 import { ExtendedFirestoreInstance } from "react-redux-firebase";
-import { Enum_Member_Group, Member } from "../types/member";
+import {
+  Enum_Member_Group,
+  Member,
+  Enum_Member_Payment_Status
+} from "../types/member";
 
 export const getGroupMemberList = async (
   firestore: ExtendedFirestoreInstance,
@@ -18,6 +22,9 @@ export const getGroupMemberList = async (
 };
 
 export const mapMemberToExport = (member: Member) => ({
+  "Iscrizioni Completate":
+    member.paymentStatus === Enum_Member_Payment_Status.PaymentComplete ||
+    member.paymentStatus === Enum_Member_Payment_Status.Tobeverified,
   Nome: member.name,
   Gruppo: member.group,
   Ruolo: member.role,
