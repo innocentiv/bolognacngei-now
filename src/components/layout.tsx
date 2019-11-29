@@ -1,15 +1,18 @@
 import { AppBar, Button, Toolbar, Typography, Avatar } from "@material-ui/core";
 import makeStyles from "@material-ui/styles/makeStyles";
 import * as React from "react";
+import { Suspense } from "react";
 import { useAuthActions, useUser } from "../hooks/auth";
-import Membership from "../pages/membership";
-import Overview from "../pages/overview";
-import Auth from "../pages/auth";
+
 import { home, membership, overview, auth } from "../services/routes";
 import { PrivateRoute } from "./privateRoute";
 import { RedirectUserRoute } from "./redirectUserRoute";
 import { Link, Redirect, Route, useLocation } from "react-router-dom";
 import { useScrollIntoView } from "../hooks/ui";
+import Loader from "./core/loader";
+const Membership = React.lazy(() => import("../pages/membership"));
+const Overview = React.lazy(() => import("../pages/overview"));
+const Auth = React.lazy(() => import("../pages/auth"));
 
 const useStyles = makeStyles({
   title: {
@@ -48,9 +51,11 @@ const Layout: React.FC<{}> = () => {
         <Route exact path={home()}>
           <Redirect to={overview()} />
         </Route>
-        <RedirectUserRoute path={auth()} component={Auth} to={overview()} />
-        <PrivateRoute path={overview()} component={Overview} />
-        <PrivateRoute path={membership()} component={Membership} />
+        <Suspense fallback={<Loader />}>
+          <RedirectUserRoute path={auth()} component={Auth} to={overview()} />
+          <PrivateRoute path={overview()} component={Overview} />
+          <PrivateRoute path={membership()} component={Membership} />
+        </Suspense>
       </main>
     </>
   );

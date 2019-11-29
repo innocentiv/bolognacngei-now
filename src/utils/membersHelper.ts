@@ -8,7 +8,6 @@ import {
   Enum_Member_Role
 } from "../types/member";
 import { Maybe } from "../types/utils";
-import { database } from "firebase";
 
 export const getGroupMemberList = async (
   firestore: ExtendedFirestoreInstance,
