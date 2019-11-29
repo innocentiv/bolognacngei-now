@@ -12,7 +12,8 @@ import { Enum_Member_Group } from "../../types/member";
 import { useFirestore } from "react-redux-firebase";
 import {
   getGroupMemberList,
-  mapMemberToExport
+  mapMemberToExport,
+  sortMemberToExport
 } from "../../utils/membersHelper";
 import { arrayToXlsx } from "../../utils/xslx";
 import CloudDownloadIcon from "@material-ui/icons/CloudDownload";
@@ -48,7 +49,9 @@ const GroupDownloadButton: React.FC<IGroupDownloadButtonProps> = ({
     <ListItem
       onClick={async () => {
         const members = await getGroupMemberList(firestore, group);
-        const memberExport = members.map(mapMemberToExport);
+        const memberExport = members
+          .sort(sortMemberToExport)
+          .map(mapMemberToExport);
         arrayToXlsx(memberExport, group);
       }}
       className={classes.item}

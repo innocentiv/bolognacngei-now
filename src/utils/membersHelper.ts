@@ -37,3 +37,12 @@ export const mapMemberToExport = (member: Member) => ({
   "Documenti Medici": member.healthMedicalDocuments,
   "Fascia ISEE": member.reductionIsee ? member.reductionIseeRange : ""
 });
+
+export const sortMemberToExport = (a: Member, b: Member) => {
+  if (!a.role) return 1;
+  if (!b.role) return -1;
+  const roleComparison = a.role.localeCompare(b.role);
+  if (roleComparison !== 0) return roleComparison;
+  if (!a.birthdate || !b.birthdate) return roleComparison;
+  return a.birthdate.localeCompare(b.birthdate);
+};
