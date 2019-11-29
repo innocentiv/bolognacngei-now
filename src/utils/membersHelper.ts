@@ -2,8 +2,12 @@ import { ExtendedFirestoreInstance } from "react-redux-firebase";
 import {
   Enum_Member_Group,
   Member,
-  Enum_Member_Payment_Status
+  Enum_Member_Payment_Status,
+  UploadFile,
+  Enum_Member_Reductioniseerange,
+  Enum_Member_Role
 } from "../types/member";
+import { Maybe } from "../types/utils";
 
 export const getGroupMemberList = async (
   firestore: ExtendedFirestoreInstance,
@@ -21,13 +25,67 @@ export const getGroupMemberList = async (
   return members;
 };
 
-export const mapMemberToExport = (member: Member) => ({
-  "Iscrizioni Completate":
-    member.paymentStatus === Enum_Member_Payment_Status.PaymentComplete ||
-    member.paymentStatus === Enum_Member_Payment_Status.Tobeverified,
+export const getTypeMapper = <T extends string>(
+  map: { [key in T]: string }
+) => (value: Maybe<T | undefined>, fallback?: T) => {
+  let v = value;
+  if (v === null || v === undefined) {
+    return fallback ? map[fallback] : null;
+  }
+  return map[v];
+};
+
+export const mapPaymentToExport = getTypeMapper<Enum_Member_Payment_Status>({
+  paymentcomplete: "Pagamento Completato",
+  tobeverified: "Bonifico caricato",
+  needpayment: "Necessario Pagamento"
+});
+
+export const mapIseeRangeToExport = getTypeMapper<
+  Enum_Member_Reductioniseerange
+>({
+  under7000: "F1 sotto 7000",
+  under13000: "F2 sotto 13000",
+  under19000: "F3 sotto 19000"
+});
+
+export const mapRoleToExport = getTypeMapper<Enum_Member_Role>({
+  cub: "Lupetto",
+  scout: "Esporatore",
+  rover: "Rover",
+  adult: "Adulto",
+  supporter: "Sostenitore",
+  waitinglist: "Lista di Attesa"
+});
+
+export const mapGroupToExport = getTypeMapper<Enum_Member_Group>({
+  group1: "Gruppo 1",
+  group2: "Gruppo 2",
+  group3: "Gruppo 3",
+  group5: "Gruppo 5",
+  clan: "Clan",
+  administrator: "COS e COSEZ"
+});
+
+export const mapDocumentToExport = (file?: Maybe<UploadFile[]>) => {
+  if (file === null || file === undefined) {
+    return null;
+  }
+
+  return file.map(doc => doc.url).join(", ");
+};
+
+export const mapBooleanToExport = (value?: Maybe<boolean>) => {
+  return value ? "Vero" : "Falso";
+};
+
+export const mapMemberToExport = (
+  member: Member
+): { [key: string]: string | null | undefined } => ({
+  "Stato Pagamento": mapPaymentToExport(member.paymentStatus),
   Nome: member.name,
-  Gruppo: member.group,
-  Ruolo: member.role,
+  Gruppo: mapGroupToExport(member.group),
+  Ruolo: mapRoleToExport(member.role),
   "Luogo di nascita": member.birthplace,
   "Data di Nascita": member.birthdate,
   Indirizzo: member.address,
@@ -35,16 +93,16 @@ export const mapMemberToExport = (member: Member) => ({
   Email: member.email,
   Telefono: member.phone,
   "Nome del Tutore": member.tutorName,
-  "Trattamento Immagini": member.privacyImages,
+  "Trattamento Immagini": mapBooleanToExport(member.privacyImages),
   "Allergie Alimentari": member.healthFoodAllergies,
   "Allergie Insetti": member.healthInsectAllergies,
   "Allergie Farmaci": member.healthDrugsAllergies,
   "Allergie Stagionali": member.healthSeasonalAllergies,
   "Condizioni Mediche": member.healthMedicalConditions,
-  "Documenti Medici":
-    member.healthMedicalDocuments &&
-    member.healthMedicalDocuments.map(doc => doc.url).join(", "),
-  "Fascia ISEE": member.reductionIsee ? member.reductionIseeRange : ""
+  "Documenti Medici": mapDocumentToExport(member.healthMedicalDocuments),
+  "Fascia ISEE": member.reductionIsee
+    ? mapIseeRangeToExport(member.reductionIseeRange)
+    : null
 });
 
 export const sortMemberToExport = (a: Member, b: Member) => {
