@@ -41,7 +41,9 @@ export const mapMemberToExport = (member: Member) => ({
   "Allergie Farmaci": member.healthDrugsAllergies,
   "Allergie Stagionali": member.healthSeasonalAllergies,
   "Condizioni Mediche": member.healthMedicalConditions,
-  "Documenti Medici": member.healthMedicalDocuments,
+  "Documenti Medici":
+    member.healthMedicalDocuments &&
+    member.healthMedicalDocuments.map(doc => doc.url).join(", "),
   "Fascia ISEE": member.reductionIsee ? member.reductionIseeRange : ""
 });
 

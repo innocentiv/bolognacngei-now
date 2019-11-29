@@ -7,7 +7,7 @@ export const arrayToXlsx = <T>(data: T[], filename: string) => {
 
   /* add to workbook */
   let wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "People");
+  XLSX.utils.book_append_sheet(wb, ws, filename);
 
   /* write workbook (use type 'binary') */
   let wbout = XLSX.write(wb, { bookType: "xlsx", type: "binary" });
