@@ -25,7 +25,7 @@ export default async (req: NowRequest, res: NowResponse) => {
     member.reductionIsee &&
     member.reductionIseeDocuments
   ) {
-    amount = 7500;
+    amount = 11000;
   }
 
   if (member.role === Enum_Member_Role.Supporter) {
