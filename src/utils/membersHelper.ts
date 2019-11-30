@@ -8,6 +8,7 @@ import {
   Enum_Member_Role
 } from "../types/member";
 import { Maybe } from "../types/utils";
+import { CellObject } from "xlsx/types";
 
 export const getGroupMemberList = async (
   firestore: ExtendedFirestoreInstance,
@@ -16,6 +17,21 @@ export const getGroupMemberList = async (
   const membersSnapshot = await firestore
     .collection("members")
     .where("group", "==", group)
+    .get();
+  const members = [] as Member[];
+  membersSnapshot.forEach(memberDoc => {
+    const member = memberDoc.data() as Member;
+    members.push(member);
+  });
+  return members;
+};
+
+export const getIseeMemberList = async (
+  firestore: ExtendedFirestoreInstance
+) => {
+  const membersSnapshot = await firestore
+    .collection("members")
+    .where("reductionIsee", "==", true)
     .get();
   const members = [] as Member[];
   membersSnapshot.forEach(memberDoc => {
@@ -67,12 +83,22 @@ export const mapGroupToExport = getTypeMapper<Enum_Member_Group>({
   administrator: "COS e COSEZ"
 });
 
-export const mapDocumentToExport = (file?: Maybe<UploadFile[]>) => {
+export const mapDocumentToExport = (
+  file?: Maybe<UploadFile[]>,
+  index: number = 0
+) => {
   if (file === null || file === undefined) {
     return null;
   }
 
-  return file.map(doc => doc.url).join(", ");
+  return file.map(doc => {
+    const cellObj: CellObject = {
+      l: { Target: doc.url, Tooltip: doc.name },
+      t: "s",
+      v: doc.name
+    };
+    return cellObj;
+  })[index];
 };
 
 export const mapBooleanToExport = (value?: Maybe<boolean>) => {
@@ -103,7 +129,7 @@ export const mapDateToExport = (date: string) => {
 
 export const mapMemberToExport = (
   member: Member
-): { [key: string]: string | null | undefined } => ({
+): { [key: string]: CellObject | string | null | undefined } => ({
   "Stato Pagamento": mapPaymentToExport(
     member.paymentStatus,
     Enum_Member_Payment_Status.Needpayment
@@ -124,10 +150,33 @@ export const mapMemberToExport = (
   "Allergie Farmaci": member.healthDrugsAllergies,
   "Allergie Stagionali": member.healthSeasonalAllergies,
   "Condizioni Mediche": member.healthMedicalConditions,
-  "Documenti Medici": mapDocumentToExport(member.healthMedicalDocuments),
+  "Documenti Medici 1": mapDocumentToExport(member.healthMedicalDocuments, 0),
+  "Documenti Medici 2": mapDocumentToExport(member.healthMedicalDocuments, 1),
   "Fascia ISEE": member.reductionIsee
     ? mapIseeRangeToExport(member.reductionIseeRange)
     : null
+});
+
+export const mapIseeMemberToExport = (
+  member: Member
+): { [key: string]: CellObject | string | null | undefined } => ({
+  Nome: member.name,
+  Gruppo: mapGroupToExport(member.group),
+  Ruolo: mapRoleToExport(member.role),
+  "Codice Fiscale": member.fiscalCode,
+  Email: member.email,
+  Telefono: member.phone,
+  "Nome del Tutore": member.tutorName,
+  "Fascia ISEE": member.reductionIsee
+    ? mapIseeRangeToExport(member.reductionIseeRange)
+    : null,
+  "Documenti Isee 1": mapDocumentToExport(member.reductionIseeDocuments, 0),
+  "Documenti Isee 2": mapDocumentToExport(member.reductionIseeDocuments, 1),
+  "Documento Pagamento": mapDocumentToExport(member.paymentBankTransfert, 0),
+  "Stato Pagamento": mapPaymentToExport(
+    member.paymentStatus,
+    Enum_Member_Payment_Status.Needpayment
+  )
 });
 
 export const sortMemberToExport = (a: Member, b: Member) => {

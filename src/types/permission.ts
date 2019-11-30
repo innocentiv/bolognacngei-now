@@ -9,6 +9,7 @@ export enum Enum_Permission {
 export type Permission = {
   id?: string;
   managePermission?: Maybe<Enum_Permission>;
+  manageIsee?: Maybe<Enum_Permission>;
 } & MemberPermission;
 
 export type MemberPermission = {

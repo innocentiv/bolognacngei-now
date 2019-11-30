@@ -20,8 +20,13 @@ export const arrayToXlsx = <T>(data: T[], filename: string) => {
     return buf;
   }
 
+  const isodate = new Date()
+    .toISOString()
+    .substring(0, 16)
+    .replace(":", "-");
+
   saveAs(
     new Blob([s2ab(wbout)], { type: "application/octet-stream" }),
-    `${filename}.xlsx`
+    `${filename}-${isodate}.xlsx`
   );
 };
