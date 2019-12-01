@@ -54,7 +54,8 @@ export const getTypeMapper = <T extends string>(
 export const mapPaymentToExport = getTypeMapper<Enum_Member_Payment_Status>({
   paymentcomplete: "Pagamento Completato",
   tobeverified: "Bonifico caricato",
-  needpayment: "Necessario Pagamento"
+  needpayment: "Necessario Pagamento",
+  needintegration: "Necessaria Integrazione"
 });
 
 export const mapIseeRangeToExport = getTypeMapper<

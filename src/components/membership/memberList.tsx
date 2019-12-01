@@ -19,6 +19,14 @@ import {
   Enum_Member_Role
 } from "../../types/member";
 import Loader from "../core/loader";
+import { getTypeMapper } from "../../utils/membersHelper";
+
+export const mapPaymentToNote = getTypeMapper<Enum_Member_Payment_Status>({
+  paymentcomplete: "Iscrizioni e pagamento completati",
+  tobeverified: "Bonifico caricato in attesa di verifica",
+  needpayment: "Iscrizioni da completare",
+  needintegration: "Necessaria integrazione alla quota"
+});
 
 interface IMemberListProps {}
 
@@ -34,11 +42,17 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: theme.palette.grey[100],
       display: "block"
     },
-    paymentComplete: {
+    paymentcomplete: {
       backgroundColor: "rgb(181, 220, 167)"
     },
     tobeverified: {
       backgroundColor: "rgb(255, 230, 138)"
+    },
+    needpayment: {
+      backgroundColor: theme.palette.grey[100]
+    },
+    needintegration: {
+      backgroundColor: "rgb(255, 175, 108)"
     }
   })
 );
@@ -65,12 +79,6 @@ const MemberList: React.FC<IMemberListProps> = props => {
       </Typography>
       <List className={classes.list}>
         {members.map((member, index) => {
-          const isPaymentComplete =
-            member &&
-            member.paymentStatus === Enum_Member_Payment_Status.PaymentComplete;
-          const isPaymentToBeVerified =
-            member &&
-            member.paymentStatus === Enum_Member_Payment_Status.Tobeverified;
           return (
             <Link
               key={index}
@@ -80,11 +88,7 @@ const MemberList: React.FC<IMemberListProps> = props => {
                   : membershipData(member.id)
               }
               className={`${classes.item} ${
-                isPaymentComplete
-                  ? classes.paymentComplete
-                  : isPaymentToBeVerified
-                  ? classes.tobeverified
-                  : ""
+                member.paymentStatus ? classes[member.paymentStatus] : ""
               }`}
             >
               <ListItem>
@@ -95,13 +99,10 @@ const MemberList: React.FC<IMemberListProps> = props => {
                 </ListItemAvatar>
                 <ListItemText
                   primary={member.name}
-                  secondary={
-                    isPaymentComplete
-                      ? "Iscrizioni e pagamento completati"
-                      : isPaymentToBeVerified
-                      ? "Bonifico caricato in attesa di verifica"
-                      : "Iscrizioni da completare"
-                  }
+                  secondary={mapPaymentToNote(
+                    member.paymentStatus,
+                    Enum_Member_Payment_Status.Needpayment
+                  )}
                 />
                 {/* <ListItemSecondaryAction>
                   <IconButton

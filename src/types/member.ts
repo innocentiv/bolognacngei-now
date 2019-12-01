@@ -41,7 +41,8 @@ export enum Enum_Member_Role {
 export enum Enum_Member_Payment_Status {
   Needpayment = "needpayment",
   Tobeverified = "tobeverified",
-  PaymentComplete = "paymentcomplete"
+  PaymentComplete = "paymentcomplete",
+  Needintegration = "needintegration"
 }
 
 export type Member = {
@@ -92,5 +93,6 @@ export type Member = {
   reductionIseeDocuments?: Maybe<Array<UploadFile>>;
   paymentStatus?: Maybe<Enum_Member_Payment_Status>;
   paymentBankTransfert?: Maybe<Array<UploadFile>>;
-  paymentId?: string;
+  paymentId?: Maybe<string>;
+  paymentPayedAmount?: Maybe<number>;
 };

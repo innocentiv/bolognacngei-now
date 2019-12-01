@@ -32,6 +32,13 @@ export default async (req: NowRequest, res: NowResponse) => {
     amount = 5000;
   }
 
+  if (
+    member.paymentPayedAmount !== undefined &&
+    member.paymentPayedAmount !== null
+  ) {
+    amount -= member.paymentPayedAmount;
+  }
+
   const paymentIntent = await stripe.paymentIntents.create({
     amount,
     currency: "eur",

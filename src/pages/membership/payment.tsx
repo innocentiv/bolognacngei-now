@@ -77,8 +77,14 @@ const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
     member.paymentStatus === Enum_Member_Payment_Status.PaymentComplete;
   const isPaymentToBeVerified =
     member && member.paymentStatus === Enum_Member_Payment_Status.Tobeverified;
+  const isPaymentNeedIntegration =
+    member &&
+    member.paymentStatus === Enum_Member_Payment_Status.Needintegration;
 
-  if (isPaymentComplete || isPaymentToBeVerified) {
+  if (
+    !isPaymentNeedIntegration &&
+    (isPaymentComplete || isPaymentToBeVerified)
+  ) {
     return (
       <>
         <PageWrapper>
@@ -172,10 +178,23 @@ const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
         {({ isSubmitting, status }: FormikProps<Values>) => {
           return paymentIntent && stripe ? (
             <Form className={classes.paymentForm}>
-              <Typography variant="h5" component="h3">
-                Quota di iscrizione annuale:{" "}
-                {paymentIntent ? paymentIntent.amount / 100 : ""}€
-              </Typography>
+              {member.paymentPayedAmount ? (
+                <>
+                  <Typography component="p">
+                    Quota di iscrizione già pagata:{" "}
+                    {member.paymentPayedAmount / 100}€
+                  </Typography>
+                  <Typography variant="h5" component="h3">
+                    Quota di iscrizione annuale da integrare:{" "}
+                    {paymentIntent ? paymentIntent.amount / 100 : ""}€
+                  </Typography>
+                </>
+              ) : (
+                <Typography variant="h5" component="h3">
+                  Quota di iscrizione annuale:{" "}
+                  {paymentIntent ? paymentIntent.amount / 100 : ""}€
+                </Typography>
+              )}
               <Typography variant="h6" component="h4">
                 Paga con la carta di Credito
               </Typography>
