@@ -20,14 +20,6 @@ export default async (req: NowRequest, res: NowResponse) => {
   ) {
     amount -= 1500;
   }
-  if (
-    member.role !== Enum_Member_Role.Adult &&
-    member.reductionIsee &&
-    member.reductionIseeDocuments
-  ) {
-    amount = 11000;
-  }
-
   if (member.role === Enum_Member_Role.Supporter) {
     amount = 5000;
   }

@@ -198,38 +198,33 @@ const MembershipReduction: React.FC<IMembershipReductionProps> = ({
                   />
                 </>
               )}
+              <Typography variant="h5" component="h3">
+                Quota ridotta per famigliari iscritti CNGEI di Bologna
+              </Typography>
+              <CheckBoxField<Values>
+                name="reductionFamily"
+                label="Dichiaro che iscriverò per l'anno scout 2019 - 2020 almeno due membri dello stesso nucleo famigliare"
+                errors={errors}
+              />
 
-              {!values.reductionIsee && (
+              {values.reductionFamily && (
                 <>
-                  <Typography variant="h5" component="h3">
-                    Quota ridotta per famigliari iscritti CNGEI di Bologna
-                  </Typography>
-                  <CheckBoxField<Values>
-                    name="reductionFamily"
-                    label="Dichiaro che iscriverò per l'anno scout 2019 - 2020 almeno due membri dello stesso nucleo famigliare"
+                  <SelectField
+                    name="reductionFamilyRelation"
+                    label="Rapporto di parentela"
                     errors={errors}
+                  >
+                    <MenuItem value="sibling">Fratello o Sorella</MenuItem>
+                    <MenuItem value="child">Figlio o Figlia</MenuItem>
+                    <MenuItem value="parent">Genitore</MenuItem>
+                  </SelectField>
+
+                  <Field
+                    name="reductionRelativeName"
+                    type="text"
+                    label="Nome del familiare iscritto al CNGEI di Bologna"
+                    component={TextField}
                   />
-
-                  {values.reductionFamily && (
-                    <>
-                      <SelectField
-                        name="reductionFamilyRelation"
-                        label="Rapporto di parentela"
-                        errors={errors}
-                      >
-                        <MenuItem value="sibling">Fratello o Sorella</MenuItem>
-                        <MenuItem value="child">Figlio o Figlia</MenuItem>
-                        <MenuItem value="parent">Genitore</MenuItem>
-                      </SelectField>
-
-                      <Field
-                        name="reductionRelativeName"
-                        type="text"
-                        label="Nome del familiare iscritto al CNGEI di Bologna"
-                        component={TextField}
-                      />
-                    </>
-                  )}
                 </>
               )}
 
