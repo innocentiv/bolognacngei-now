@@ -20,7 +20,8 @@ export enum Enum_Member_Group {
 export enum Enum_Member_Reductionfamilyrelation {
   Sibling = "sibling",
   Child = "child",
-  Parent = "parent"
+  Parent = "parent",
+  Spouse = "spouse"
 }
 
 export enum Enum_Member_Reductioniseerange {

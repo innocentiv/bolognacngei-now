@@ -24,7 +24,7 @@ import { CheckBoxField } from "../../components/core/checkBoxField";
 import { SelectField } from "../../components/core/selectField";
 
 interface IMembershipReductionProps
-  extends RouteComponentProps<{ id: string }> {}
+  extends RouteComponentProps<{ id: string }> { }
 
 export interface Values {
   reductionIsee: boolean;
@@ -217,6 +217,7 @@ const MembershipReduction: React.FC<IMembershipReductionProps> = ({
                     <MenuItem value="sibling">Fratello o Sorella</MenuItem>
                     <MenuItem value="child">Figlio o Figlia</MenuItem>
                     <MenuItem value="parent">Genitore</MenuItem>
+                    <MenuItem value="spouse">Coniuge</MenuItem>
                   </SelectField>
 
                   <Field
