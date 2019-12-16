@@ -25,6 +25,10 @@ import {
 import { Enum_Member_Payment_Status } from "../../types/member";
 import CreateMember from "../../components/membership/createMember";
 import Loader from "../../components/core/loader";
+import {
+  computeDefaultInterest,
+  END_REGISTRATION_DATE
+} from "../../utils/payment";
 
 type IMembershipPaymentProps = RouteComponentProps<{ id: string }> &
   ReactStripeElements.InjectedStripeProps;
@@ -80,6 +84,10 @@ const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
   const isPaymentNeedIntegration =
     member &&
     member.paymentStatus === Enum_Member_Payment_Status.Needintegration;
+  const paymentDefaultInterest = computeDefaultInterest(
+    END_REGISTRATION_DATE,
+    new Date()
+  );
 
   if (
     !isPaymentNeedIntegration &&
@@ -163,7 +171,8 @@ const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
             member.paymentBankTransfert.length > 0
           ) {
             await updateMember(id, {
-              paymentStatus: Enum_Member_Payment_Status.Tobeverified
+              paymentStatus: Enum_Member_Payment_Status.Tobeverified,
+              paymentDue: paymentIntent ? paymentIntent.amount : 0
             });
             setSubmitting(false);
           }
@@ -178,6 +187,14 @@ const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
         {({ isSubmitting, status }: FormikProps<Values>) => {
           return paymentIntent && stripe ? (
             <Form className={classes.paymentForm}>
+              {paymentDefaultInterest > 0 && (
+                <>
+                  <Typography component="p">
+                    Mora per ritardo iscrizione (compresa):{" "}
+                    {paymentDefaultInterest / 100}€
+                  </Typography>
+                </>
+              )}
               {member.paymentPayedAmount ? (
                 <>
                   <Typography component="p">

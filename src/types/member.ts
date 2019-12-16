@@ -96,4 +96,5 @@ export type Member = {
   paymentBankTransfert?: Maybe<Array<UploadFile>>;
   paymentId?: Maybe<string>;
   paymentPayedAmount?: Maybe<number>;
+  paymentDue?: Maybe<number>;
 };
