@@ -12,3 +12,5 @@ export const membershipReduction = (id = ":id") =>
   `/membership/${id}/reduction`;
 export const membershipPayment = (id = ":id") => `/membership/${id}/payment`;
 export const permission = () => "/permission";
+export const admin = () => "/admin";
+export const adminActions = () => "/admin/actions";

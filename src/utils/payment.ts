@@ -45,7 +45,10 @@ export const computeMembershipFeeForMember = (member: Member) => {
     amount -= member.paymentPayedAmount;
   }
 
-  amount += computeDefaultInterest(END_REGISTRATION_DATE, new Date());
+  const firstPaymentDate = member.dateFirstCompleted
+    ? new Date(member.dateFirstCompleted)
+    : new Date();
+  amount += computeDefaultInterest(END_REGISTRATION_DATE, firstPaymentDate);
 
   return amount;
 };

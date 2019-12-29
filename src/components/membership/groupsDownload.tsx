@@ -12,6 +12,7 @@ import { usePermissions } from "../../hooks/permissions";
 import { Enum_Permission } from "../../types/permission";
 import GroupDownloadButton from "./groupDownloadButton";
 import IseeDownloadButton from "./iseeDownloadButton";
+import AllUserDownloadButton from "./alluserDownloadButton";
 
 interface IGroupsDownloadProps {}
 
@@ -55,7 +56,10 @@ const GroupsDownload: React.FC<IGroupsDownloadProps> = props => {
           ))}
         {(permission.manageIsee === Enum_Permission.Read ||
           permission.manageIsee === Enum_Permission.Write) && (
-          <IseeDownloadButton />
+          <>
+            <IseeDownloadButton />
+            <AllUserDownloadButton />
+          </>
         )}
       </List>
     </>

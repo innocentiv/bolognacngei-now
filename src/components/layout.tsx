@@ -4,13 +4,14 @@ import * as React from "react";
 import { Suspense } from "react";
 import { useAuthActions, useUser } from "../hooks/auth";
 
-import { home, membership, overview, auth } from "../services/routes";
+import { home, membership, overview, auth, admin } from "../services/routes";
 import { PrivateRoute } from "./privateRoute";
 import { RedirectUserRoute } from "./redirectUserRoute";
 import { Link, Redirect, Route, useLocation } from "react-router-dom";
 import { useScrollIntoView } from "../hooks/ui";
 import Loader from "./core/loader";
 const Membership = React.lazy(() => import("../pages/membership"));
+const Admin = React.lazy(() => import("../pages/admin"));
 const Overview = React.lazy(() => import("../pages/overview"));
 const Auth = React.lazy(() => import("../pages/auth"));
 
@@ -55,6 +56,7 @@ const Layout: React.FC<{}> = () => {
           <RedirectUserRoute path={auth()} component={Auth} to={overview()} />
           <PrivateRoute path={overview()} component={Overview} />
           <PrivateRoute path={membership()} component={Membership} />
+          <PrivateRoute path={admin()} component={Admin} />
         </Suspense>
       </main>
     </>

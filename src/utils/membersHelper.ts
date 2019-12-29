@@ -9,6 +9,7 @@ import {
 } from "../types/member";
 import { Maybe } from "../types/utils";
 import { CellObject } from "xlsx/types";
+import { computeMembershipFeeForMember } from "./payment";
 
 export const getGroupMemberList = async (
   firestore: ExtendedFirestoreInstance,
@@ -33,6 +34,18 @@ export const getIseeMemberList = async (
     .collection("members")
     .where("reductionIsee", "==", true)
     .get();
+  const members = [] as Member[];
+  membersSnapshot.forEach(memberDoc => {
+    const member = memberDoc.data() as Member;
+    members.push(member);
+  });
+  return members;
+};
+
+export const getAllMemberList = async (
+  firestore: ExtendedFirestoreInstance
+) => {
+  const membersSnapshot = await firestore.collection("members").get();
   const members = [] as Member[];
   membersSnapshot.forEach(memberDoc => {
     const member = memberDoc.data() as Member;
@@ -128,6 +141,10 @@ export const mapDateToExport = (date: string) => {
   return isValidDate(dateObj) ? dateObj.toLocaleDateString("it") : "";
 };
 
+export const mapPriceToExport = (price: number) => {
+  return (price / 100).toLocaleString() + "€";
+};
+
 export const mapMemberToExport = (
   member: Member
 ): { [key: string]: CellObject | string | null | undefined } => ({
@@ -180,11 +197,55 @@ export const mapIseeMemberToExport = (
   )
 });
 
+export const mapAllMemberToExport = (
+  member: Member
+): { [key: string]: CellObject | string | null | undefined } => ({
+  Nome: member.name,
+  Gruppo: mapGroupToExport(member.group),
+  Ruolo: mapRoleToExport(member.role),
+  "Luogo di nascita": member.birthplace,
+  "Data di Nascita": member.birthdate && mapDateToExport(member.birthdate),
+  Indirizzo: member.address,
+  "Codice Fiscale": member.fiscalCode,
+  Email: member.email,
+  Telefono: member.phone,
+  "Nome del Tutore": member.tutorName,
+  "Fascia ISEE": member.reductionIsee
+    ? mapIseeRangeToExport(member.reductionIseeRange)
+    : null,
+  "Documenti Isee 1": mapDocumentToExport(member.reductionIseeDocuments, 0),
+  "Documenti Isee 2": mapDocumentToExport(member.reductionIseeDocuments, 1),
+  "Documento Pagamento 1": mapDocumentToExport(member.paymentBankTransfert, 0),
+  "Documento Pagamento 2": mapDocumentToExport(member.paymentBankTransfert, 1),
+  "Stato Pagamento": mapPaymentToExport(
+    member.paymentStatus,
+    Enum_Member_Payment_Status.Needpayment
+  ),
+  "Pagamento Verificato": member.paymentPayedAmount
+    ? mapPriceToExport(member.paymentPayedAmount)
+    : "",
+  "Pagamento Richesto": mapPriceToExport(
+    member.paymentDue || computeMembershipFeeForMember(member)
+  ),
+  "Data ultima modifica":
+    member.dateLastUpdated && mapDateToExport(member.dateLastUpdated),
+  "Data iscrizione":
+    member.dateFirstCompleted && mapDateToExport(member.dateFirstCompleted)
+});
+
 export const sortMemberToExport = (a: Member, b: Member) => {
+  if (!a.group) return 1;
+  if (!b.group) return -1;
+  const groupComparison = a.group.localeCompare(b.group);
+  if (groupComparison !== 0) return groupComparison;
   if (!a.role) return 1;
   if (!b.role) return -1;
   const roleComparison = a.role.localeCompare(b.role);
   if (roleComparison !== 0) return roleComparison;
   if (!a.birthdate || !b.birthdate) return roleComparison;
   return a.birthdate.localeCompare(b.birthdate);
+};
+
+export const getNowDateString = () => {
+  return new Date().toISOString().substr(0, 10);
 };

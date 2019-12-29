@@ -19,10 +19,13 @@ import {
 import FolderIcon from "@material-ui/icons/Folder";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { Member, UploadFile } from "../../types/member";
+import { KeysOfType, Maybe } from "../../types/utils";
+
+type DocumentProperty = KeysOfType<Required<Member>, Maybe<Array<UploadFile>>>;
 
 interface FileUploadProps {
   memberId: string;
-  memberProperty: keyof Member;
+  memberProperty: DocumentProperty;
   errors?: {
     [k: string]: string | undefined;
   };
@@ -76,18 +79,20 @@ const FileUpload: React.FC<FileUploadProps> = ({
       } catch (e) {
         console.error(e);
       }
+      const files = member[memberProperty];
+      const filesAfterDelete = files
+        ? files.filter((docs: UploadFile) => docs.name !== file.name)
+        : [];
       await updateMember(memberId, {
-        [memberProperty]: member[memberProperty]
-          ? member[memberProperty].filter(
-              (docs: UploadFile) => docs.name !== file.name
-            )
-          : []
+        [memberProperty]: filesAfterDelete
       });
     },
     [deleteFile, member, memberId, memberProperty, updateMember]
   );
 
   const hasError = errors && !!errors[memberProperty];
+  const hasFiles = member && !!member[memberProperty];
+  const filesList = hasFiles ? member[memberProperty] : [];
 
   return (
     <>
@@ -98,9 +103,9 @@ const FileUpload: React.FC<FileUploadProps> = ({
         dropzoneText="Trascina i documenti o clicca"
         showPreviewsInDropzone={false}
       />
-      {member && member[memberProperty] && (
+      {filesList && (
         <List className={classes.list}>
-          {member[memberProperty].map((file: UploadFile, index: number) => (
+          {filesList.map((file: UploadFile, index: number) => (
             <ListItem className={classes.item} key={index}>
               <ListItemAvatar>
                 <Avatar>

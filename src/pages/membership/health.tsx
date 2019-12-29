@@ -27,7 +27,7 @@ import { useNavigate } from "../../hooks/router";
 import { ValidatorHelper } from "../../utils/validatorHelper";
 import { CheckBoxField } from "../../components/core/checkBoxField";
 import { Enum_Member_Payment_Status } from "../../types/member";
-import { dateToIsoDate } from "../../utils/membersHelper";
+import { dateToIsoDate, getNowDateString } from "../../utils/membersHelper";
 
 interface IMembershipHealthProps extends RouteComponentProps<{ id: string }> {}
 
@@ -132,7 +132,8 @@ const MembershipHealth: React.FC<IMembershipHealthProps> = ({ match }) => {
             ...values,
             healthTetanusDate:
               values.healthTetanusDate &&
-              dateToIsoDate(values.healthTetanusDate)
+              dateToIsoDate(values.healthTetanusDate),
+            dateLastUpdated: getNowDateString()
           } as any);
           setSubmitting(false);
           if (

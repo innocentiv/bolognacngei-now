@@ -29,6 +29,7 @@ import {
   computeDefaultInterest,
   END_REGISTRATION_DATE
 } from "../../utils/payment";
+import { getNowDateString } from "../../utils/membersHelper";
 
 type IMembershipPaymentProps = RouteComponentProps<{ id: string }> &
   ReactStripeElements.InjectedStripeProps;
@@ -86,7 +87,7 @@ const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
     member.paymentStatus === Enum_Member_Payment_Status.Needintegration;
   const paymentDefaultInterest = computeDefaultInterest(
     END_REGISTRATION_DATE,
-    new Date()
+    member.dateFirstCompleted ? new Date(member.dateFirstCompleted) : new Date()
   );
 
   if (
@@ -160,7 +161,10 @@ const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
           ) {
             await updateMember(id, {
               paymentStatus: Enum_Member_Payment_Status.PaymentComplete,
-              paymentId: paymentResult.paymentIntent.id
+              paymentId: paymentResult.paymentIntent.id,
+              dateLastUpdated: getNowDateString(),
+              dateFirstCompleted:
+                member.dateFirstCompleted || getNowDateString()
             });
             setSubmitting(false);
             return;
@@ -172,7 +176,10 @@ const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
           ) {
             await updateMember(id, {
               paymentStatus: Enum_Member_Payment_Status.Tobeverified,
-              paymentDue: paymentIntent ? paymentIntent.amount : 0
+              paymentDue: paymentIntent ? paymentIntent.amount : 0,
+              dateLastUpdated: getNowDateString(),
+              dateFirstCompleted:
+                member.dateFirstCompleted || getNowDateString()
             });
             setSubmitting(false);
           }

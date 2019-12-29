@@ -18,6 +18,7 @@ import { useNavigate } from "../../hooks/router";
 import { ValidatorHelper } from "../../utils/validatorHelper";
 import { CheckBoxField } from "../../components/core/checkBoxField";
 import ArrowBackIos from "@material-ui/icons/ArrowBackIos";
+import { getNowDateString } from "../../utils/membersHelper";
 
 interface IMembershipSupporterProps
   extends RouteComponentProps<{ id: string }> {}
@@ -174,7 +175,10 @@ const MembershipSupporter: React.FC<IMembershipSupporterProps> = ({
           return validator.getErrors();
         }}
         onSubmit={async (values, { setSubmitting }) => {
-          await updateMember(id, values as any);
+          await updateMember(id, {
+            ...(values as any),
+            dateLastUpdated: getNowDateString()
+          });
           setSubmitting(false);
           navigate(membershipPayment(id));
         }}

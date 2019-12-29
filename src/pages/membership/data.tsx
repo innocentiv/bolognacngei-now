@@ -20,7 +20,7 @@ import { ValidatorHelper } from "../../utils/validatorHelper";
 import { CheckBoxField } from "../../components/core/checkBoxField";
 import { SelectField } from "../../components/core/selectField";
 import ArrowBackIos from "@material-ui/icons/ArrowBackIos";
-import { dateToIsoDate } from "../../utils/membersHelper";
+import { dateToIsoDate, getNowDateString } from "../../utils/membersHelper";
 
 interface IMembershipDataProps extends RouteComponentProps<{ id: string }> {}
 
@@ -185,7 +185,8 @@ const MembershipData: React.FC<IMembershipDataProps> = ({ match }) => {
         onSubmit={async (values, { setSubmitting }) => {
           await updateMember(id, {
             ...values,
-            birthdate: values.birthdate && dateToIsoDate(values.birthdate)
+            birthdate: values.birthdate && dateToIsoDate(values.birthdate),
+            dateLastUpdated: getNowDateString()
           } as any);
           setSubmitting(false);
           navigate(membershipHealth(id));

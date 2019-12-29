@@ -22,9 +22,10 @@ import { useNavigate } from "../../hooks/router";
 import { ValidatorHelper } from "../../utils/validatorHelper";
 import { CheckBoxField } from "../../components/core/checkBoxField";
 import { SelectField } from "../../components/core/selectField";
+import { getNowDateString } from "../../utils/membersHelper";
 
 interface IMembershipReductionProps
-  extends RouteComponentProps<{ id: string }> { }
+  extends RouteComponentProps<{ id: string }> {}
 
 export interface Values {
   reductionIsee: boolean;
@@ -124,7 +125,10 @@ const MembershipReduction: React.FC<IMembershipReductionProps> = ({
             setSubmitting(false);
             return;
           }
-          await updateMember(id, values as any);
+          await updateMember(id, {
+            ...(values as any),
+            dateLastUpdated: getNowDateString()
+          });
 
           navigate(membershipPayment(id));
         }}

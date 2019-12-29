@@ -6,7 +6,7 @@ export type UploadFile = {
   name: string;
   path: string;
 };
-export type DateTime = any;
+export type DateTime = string;
 
 export enum Enum_Member_Group {
   Group1 = "group1",
@@ -66,6 +66,8 @@ export type Member = {
   isInformed?: Maybe<boolean>;
   noAdverse?: Maybe<boolean>;
   emailCommunication?: Maybe<boolean>;
+  dateLastUpdated?: Maybe<DateTime>;
+  dateFirstCompleted?: Maybe<DateTime>;
   privacyImages?: Maybe<boolean>;
   privacyEshop?: Maybe<boolean>;
   privacyHealth?: Maybe<boolean>;
