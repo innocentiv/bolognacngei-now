@@ -206,6 +206,7 @@ export const mapAllMemberToExport = (
   "Luogo di nascita": member.birthplace,
   "Data di Nascita": member.birthdate && mapDateToExport(member.birthdate),
   Indirizzo: member.address,
+  "Indirizzo Formattato": member.formattedAddress,
   "Codice Fiscale": member.fiscalCode,
   Email: member.email,
   Telefono: member.phone,

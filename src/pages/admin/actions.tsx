@@ -4,7 +4,7 @@ import { RouteComponentProps } from "react-router";
 import PageWrapper from "../../components/pageWrapper";
 import { useFirestore } from "react-redux-firebase";
 import { Member, Enum_Member_Payment_Status } from "../../types/member";
-import { computeMembershipFeeForMember } from "../../utils/payment";
+import { usePlaceApi } from "../../hooks/googleapi";
 
 interface IAdminActionsProps extends RouteComponentProps<{}> {}
 
@@ -18,6 +18,7 @@ export interface Values {
 
 const AdminActions: React.FC<IAdminActionsProps> = () => {
   const firestore = useFirestore();
+  const { formattedFromAddress } = usePlaceApi();
 
   return (
     <PageWrapper>
@@ -66,19 +67,18 @@ const AdminActions: React.FC<IAdminActionsProps> = () => {
         color="primary"
         onClick={async () => {
           const membersSnapshot = await firestore.collection("members").get();
-          membersSnapshot.forEach(memberDoc => {
+
+          membersSnapshot.forEach(async memberDoc => {
             const member = memberDoc.data() as Member;
-            const fee = computeMembershipFeeForMember(member);
-            console.log(
-              member.id,
-              member.name,
-              fee,
-              member.paymentDue && fee !== member.paymentDue ? "ERROR" : "OK"
-            );
+            const formattedAddress =
+              member.address && (await formattedFromAddress(member.address));
+            memberDoc.ref.update({
+              formattedAddress: formattedAddress || ""
+            });
           });
         }}
       >
-        Fill in payment required
+        Fill formatted Address
       </Button>
     </PageWrapper>
   );

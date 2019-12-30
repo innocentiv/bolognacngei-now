@@ -56,6 +56,7 @@ export type Member = {
   birthplace?: Maybe<string>;
   birthdate?: Maybe<DateTime>;
   address?: Maybe<string>;
+  formattedAddress?: Maybe<string>;
   fiscalCode?: Maybe<string>;
   email?: Maybe<string>;
   phone?: Maybe<string>;
