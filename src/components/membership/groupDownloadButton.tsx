@@ -13,10 +13,12 @@ import { useFirestore } from "react-redux-firebase";
 import {
   getGroupMemberList,
   mapMemberToExport,
+  mapMemberToHealthExport,
   sortMemberToExport
 } from "../../utils/membersHelper";
 import { arrayToXlsx } from "../../utils/xslx";
-import CloudDownloadIcon from "@material-ui/icons/CloudDownload";
+import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
+import HealingIcon from "@material-ui/icons/Healing";
 
 interface IGroupDownloadButtonProps {
   group: Enum_Member_Group;
@@ -24,7 +26,7 @@ interface IGroupDownloadButtonProps {
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    item: {
+    downloadIcon: {
       cursor: "pointer"
     }
   })
@@ -46,19 +48,33 @@ const GroupDownloadButton: React.FC<IGroupDownloadButtonProps> = ({
   const classes = useStyles();
 
   return group && firestore ? (
-    <ListItem
-      onClick={async () => {
-        const members = await getGroupMemberList(firestore, group);
-        const memberExport = members
-          .sort(sortMemberToExport)
-          .map(mapMemberToExport);
-        arrayToXlsx(memberExport, group);
-      }}
-      className={classes.item}
-    >
+    <ListItem>
       <ListItemAvatar>
-        <Avatar>
-          <CloudDownloadIcon />
+        <Avatar
+          onClick={async () => {
+            const members = await getGroupMemberList(firestore, group);
+            const memberExport = members
+              .sort(sortMemberToExport)
+              .map(mapMemberToExport);
+            arrayToXlsx(memberExport, group);
+          }}
+          className={classes.downloadIcon}
+        >
+          <AssignmentIndIcon />
+        </Avatar>
+      </ListItemAvatar>
+      <ListItemAvatar>
+        <Avatar
+          onClick={async () => {
+            const members = await getGroupMemberList(firestore, group);
+            const memberExport = members
+              .sort(sortMemberToExport)
+              .map(mapMemberToHealthExport);
+            arrayToXlsx(memberExport, `healthData-${group}`);
+          }}
+          className={classes.downloadIcon}
+        >
+          <HealingIcon />
         </Avatar>
       </ListItemAvatar>
       <ListItemText primary={groupLabels[group]} />

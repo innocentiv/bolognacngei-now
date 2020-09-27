@@ -116,7 +116,26 @@ export const mapDocumentToExport = (
 };
 
 export const mapBooleanToExport = (value?: Maybe<boolean>) => {
-  return value ? "Vero" : "Falso";
+  return value ? "Si" : "No";
+};
+
+export const mapHealthConditionToExport = (value?: Maybe<string>) => {
+  if (!value) return undefined;
+  const normalizedValue = value.toLocaleLowerCase().trim();
+  if (
+    [
+      "no",
+      "nessuna",
+      "nessuno",
+      "nulla",
+      "non note",
+      "nessuna nota",
+      "non conosciute",
+      "non conosciuta"
+    ].includes(normalizedValue)
+  )
+    return undefined;
+  return value;
 };
 
 export const isValidDate = (date: Date) => {
@@ -158,21 +177,51 @@ export const mapMemberToExport = (
   "Luogo di nascita": member.birthplace,
   "Data di Nascita": member.birthdate && mapDateToExport(member.birthdate),
   Indirizzo: member.address,
+  "Indirizzo Formattato": member.formattedAddress,
   "Codice Fiscale": member.fiscalCode,
   Email: member.email,
   Telefono: member.phone,
   "Nome del Tutore": member.tutorName,
   "Trattamento Immagini": mapBooleanToExport(member.privacyImages),
-  "Allergie Alimentari": member.healthFoodAllergies,
-  "Allergie Insetti": member.healthInsectAllergies,
-  "Allergie Farmaci": member.healthDrugsAllergies,
-  "Allergie Stagionali": member.healthSeasonalAllergies,
-  "Condizioni Mediche": member.healthMedicalConditions,
-  "Documenti Medici 1": mapDocumentToExport(member.healthMedicalDocuments, 0),
-  "Documenti Medici 2": mapDocumentToExport(member.healthMedicalDocuments, 1),
   "Fascia ISEE": member.reductionIsee
     ? mapIseeRangeToExport(member.reductionIseeRange)
     : null
+});
+
+export const mapMemberToHealthExport = (
+  member: Member
+): { [key: string]: CellObject | string | null | undefined } => ({
+  Nome: member.name,
+  Ruolo: mapRoleToExport(member.role),
+  "Luogo di nascita": member.birthplace,
+  "Data di Nascita": member.birthdate && mapDateToExport(member.birthdate),
+  "Codice Fiscale": member.fiscalCode,
+  Telefono: member.phone,
+  "Nome del Tutore": member.tutorName,
+  "Trattamento Immagini": mapBooleanToExport(member.privacyImages),
+  "Allergie Alimentari": mapHealthConditionToExport(member.healthFoodAllergies),
+  "Allergie Insetti": mapHealthConditionToExport(member.healthInsectAllergies),
+  "Allergie Farmaci": mapHealthConditionToExport(member.healthDrugsAllergies),
+  "Allergie Stagionali": mapHealthConditionToExport(
+    member.healthSeasonalAllergies
+  ),
+  "Condizioni Mediche": mapHealthConditionToExport(
+    member.healthMedicalConditions
+  ),
+  "Vacc Morbillo": mapBooleanToExport(member.healthMeasles),
+  "Vacc Parotite": mapBooleanToExport(member.healthMumps),
+  "Vacc Rosolia": mapBooleanToExport(member.healthRubella),
+  "Vacc Varicella": mapBooleanToExport(member.healthChickenpox),
+  "Vacc Pertosse": mapBooleanToExport(member.healthPertussis),
+  "Vacc Tetano": mapBooleanToExport(member.healthTetanus),
+  "Vacc Polio": mapBooleanToExport(member.healthPolio),
+  "Vacc Difterite": mapBooleanToExport(member.healthDiphtheria),
+  "Vacc Epatite B": mapBooleanToExport(member.healthHepatitisB),
+  "Vacc Emofilo": mapBooleanToExport(member.healthHaemophilus),
+  "Data Tetano":
+    member.healthTetanusDate && mapDateToExport(member.healthTetanusDate),
+  "Documenti Medici 1": mapDocumentToExport(member.healthMedicalDocuments, 0),
+  "Documenti Medici 2": mapDocumentToExport(member.healthMedicalDocuments, 1)
 });
 
 export const mapIseeMemberToExport = (
