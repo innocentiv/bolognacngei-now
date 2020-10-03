@@ -18,12 +18,12 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       flexDirection: "column",
       "& > *": {
-        marginTop: theme.spacing(3)
-      }
+        marginTop: theme.spacing(3),
+      },
     },
     link: {
-      marginTop: theme.spacing(3)
-    }
+      marginTop: theme.spacing(3),
+    },
   })
 );
 
@@ -35,7 +35,7 @@ interface Values {
 const Forgot: React.FC<WithSnackbarProps> = ({ enqueueSnackbar }) => {
   const { confirmPasswordReset } = useAuthActions();
   const navigate = useNavigate();
-  const { code } = useParams();
+  const { code } = useParams<{ code: string }>();
   const error = useAuthError();
   const classes = useStyles();
 
@@ -45,9 +45,9 @@ const Forgot: React.FC<WithSnackbarProps> = ({ enqueueSnackbar }) => {
         <Formik
           initialValues={{
             password: "",
-            passwordConfirmation: ""
+            passwordConfirmation: "",
           }}
-          validate={values => {
+          validate={(values) => {
             const validator = new ValidatorHelper<Values>(values);
 
             validator.requireField("password", "Devi scegliere una password");
@@ -68,7 +68,7 @@ const Forgot: React.FC<WithSnackbarProps> = ({ enqueueSnackbar }) => {
               try {
                 await confirmPasswordReset(code, password);
                 enqueueSnackbar("Password modificata con successo", {
-                  variant: "success"
+                  variant: "success",
                 });
               } catch (error) {
                 console.error(error);

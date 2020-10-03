@@ -5,7 +5,7 @@ import {
   makeStyles,
   Theme,
   createStyles,
-  Tooltip
+  Tooltip,
 } from "@material-ui/core";
 import { Form, Formik, FormikProps } from "formik";
 import * as React from "react";
@@ -20,14 +20,14 @@ import { usePaymentIntent } from "../../hooks/stripe";
 import {
   injectStripe,
   ReactStripeElements,
-  CardElement
+  CardElement,
 } from "react-stripe-elements";
 import { Enum_Member_Payment_Status } from "../../types/member";
 import CreateMember from "../../components/membership/createMember";
 import Loader from "../../components/core/loader";
 import {
   computeDefaultInterest,
-  END_REGISTRATION_DATE
+  END_REGISTRATION_DATE,
 } from "../../utils/payment";
 import { getNowDateString } from "../../utils/membersHelper";
 
@@ -43,32 +43,32 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: "column",
       textAlign: "left",
       "& > *": {
-        marginTop: theme.spacing(3)
-      }
+        marginTop: theme.spacing(3),
+      },
     },
     loading: {
-      marginLeft: theme.spacing(1)
+      marginLeft: theme.spacing(1),
     },
     card: {
-      fontSize: "125%"
+      fontSize: "125%",
     },
     toOverview: {
-      margin: `1rem 0`
+      margin: `1rem 0`,
     },
     modifyPayment: {
-      margin: `1rem 0 4rem`
+      margin: `1rem 0 4rem`,
     },
     logo: {
       display: "block",
       margin: "1rem auto",
-      width: "40%"
-    }
+      width: "40%",
+    },
   })
 );
 
 const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
   match,
-  stripe
+  stripe,
 }) => {
   const { id } = match.params;
   const classes = useStyles();
@@ -122,7 +122,7 @@ const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
               color="primary"
               onClick={() =>
                 updateMember(id, {
-                  paymentStatus: Enum_Member_Payment_Status.Needpayment
+                  paymentStatus: Enum_Member_Payment_Status.Needpayment,
                 })
               }
               className={classes.modifyPayment}
@@ -152,7 +152,7 @@ const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
           }
 
           const paymentResult = await stripe.handleCardPayment(
-            paymentIntent.client_secret
+            paymentIntent.client_secret || ""
           );
 
           if (
@@ -164,7 +164,7 @@ const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
               paymentId: paymentResult.paymentIntent.id,
               dateLastUpdated: getNowDateString(),
               dateFirstCompleted:
-                member.dateFirstCompleted || getNowDateString()
+                member.dateFirstCompleted || getNowDateString(),
             });
             setSubmitting(false);
             return;
@@ -179,7 +179,7 @@ const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
               paymentDue: paymentIntent ? paymentIntent.amount : 0,
               dateLastUpdated: getNowDateString(),
               dateFirstCompleted:
-                member.dateFirstCompleted || getNowDateString()
+                member.dateFirstCompleted || getNowDateString(),
             });
             setSubmitting(false);
           }
@@ -237,8 +237,8 @@ const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
                 className={classes.card}
                 style={{
                   base: {
-                    fontSize: "18px"
-                  }
+                    fontSize: "18px",
+                  },
                 }}
               />
               <Typography variant="body2" component="p">
@@ -262,6 +262,8 @@ const MembershipPayment: React.FC<IMembershipPaymentProps> = ({
               <Typography component="p">
                 Effettua un pagamento tramite bonifico alle seguenti coordinate
                 bancarie:
+              </Typography>
+              <Typography component="div">
                 <dl>
                   <dt>
                     <b>IBAN: </b>

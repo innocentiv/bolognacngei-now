@@ -3,7 +3,7 @@ import {
   makeStyles,
   Theme,
   createStyles,
-  FormHelperText
+  FormHelperText,
 } from "@material-ui/core";
 import { Field } from "formik";
 import { CheckboxWithLabel } from "formik-material-ui";
@@ -11,8 +11,8 @@ import { CheckboxWithLabel } from "formik-material-ui";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     error: {
-      color: theme.palette.error.main
-    }
+      color: theme.palette.error.main,
+    },
   })
 );
 
@@ -29,7 +29,7 @@ interface CheckBoxFieldProps<Values> {
 export const CheckBoxField = <Values extends unknown>({
   name,
   label,
-  errors
+  errors,
 }: CheckBoxFieldProps<Values>): React.ReactElement => {
   const classes = useStyles();
   const hasError = errors && !!errors[name];
@@ -38,10 +38,11 @@ export const CheckBoxField = <Values extends unknown>({
       <Field
         name={name}
         Label={{
-          label
+          label,
         }}
         component={CheckboxWithLabel}
         className={hasError ? classes.error : ""}
+        type="checkbox"
       />
       {hasError && (
         <FormHelperText className={classes.error}>
